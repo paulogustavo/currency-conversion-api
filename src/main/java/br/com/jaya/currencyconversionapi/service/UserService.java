@@ -26,9 +26,9 @@ public class UserService {
         return this.userRepository.findById(id);
     }
 
-    public Mono<User> create(String email) {
+    public Mono<User> create(String name) {
         return this.userRepository
-                .save(new User(null, email))
+                .save(new User(null, name))
                 .doOnError(throwable -> {throw new RuntimeException("Error when creating user. Please try again.");});
     }
 }
