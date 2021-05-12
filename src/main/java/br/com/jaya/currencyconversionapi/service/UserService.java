@@ -10,11 +10,9 @@ import reactor.core.publisher.Mono;
 @Service
 public class UserService {
 
-    private final ApplicationEventPublisher publisher;
     private final UserRepository userRepository;
 
-    UserService(ApplicationEventPublisher publisher, UserRepository userRepository) {
-        this.publisher = publisher;
+    UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -24,11 +22,5 @@ public class UserService {
 
     public Mono<User> get(String id) {
         return this.userRepository.findById(id);
-    }
-
-    public Mono<User> create(String name) {
-        return this.userRepository
-                .save(new User(null, name))
-                .doOnError(throwable -> {throw new RuntimeException("Error when creating user. Please try again.");});
     }
 }
