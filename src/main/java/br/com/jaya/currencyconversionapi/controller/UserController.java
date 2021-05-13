@@ -19,7 +19,7 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/todo")
+    @GetMapping
     Flux<User> getAll() {
         return service.all();
     }
