@@ -2,7 +2,6 @@ package br.com.jaya.currencyconversionapi.service;
 
 import br.com.jaya.currencyconversionapi.model.User;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
