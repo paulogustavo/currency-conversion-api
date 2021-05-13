@@ -5,13 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RateDTO {
-    private String currency;
-    private BigDecimal rate;
+public class RatesResponseDTO implements Serializable {
+
+    private Map<String, BigDecimal> rates;
+
+
 }

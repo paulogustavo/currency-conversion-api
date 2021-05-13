@@ -24,13 +24,13 @@ public class Transaction {
     private String originCurrency;
 
     @Setter
-    private String convertedCurrency;
+    private String finalCurrency;
 
     @Setter
     private BigDecimal originValue;
 
     @Setter
-    private BigDecimal convertedValue;
+    private BigDecimal finalValue;
 
     @Setter
     private BigDecimal conversionRate;
