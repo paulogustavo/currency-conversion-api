@@ -1,5 +1,6 @@
 package br.com.jaya.currencyconversionapi.service;
 
+import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.model.Transaction;
 import br.com.jaya.currencyconversionapi.model.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
@@ -41,11 +42,11 @@ public class CurrencyConversionService {
             Map<String, BigDecimal> rates = ratesResponseDTO.getRates();
             Set<String> keySet = rates.keySet();
             if(keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(originCurrency))){
-                throw new RuntimeException("Origin currency not found. Only " + SYMBOLS + " permitted.");
+                return Mono.error(new CurrencyConversionException("Origin currency not found. Only " + SYMBOLS + " permitted."));
             }
 
             if(keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(finalCurrency))){
-                throw new RuntimeException("Final currency not found. Only " + SYMBOLS + " permitted.");
+                return Mono.error(new CurrencyConversionException("Final currency not found. Only " + SYMBOLS + " permitted."));
             }
 
             BigDecimal originToEUR = rates.get(originCurrency);
