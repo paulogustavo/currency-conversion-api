@@ -18,8 +18,4 @@ public class UserService {
     public Flux<User> all() {
         return this.userRepository.findAll();
     }
-
-    public Mono<User> get(String id) {
-        return this.userRepository.findById(id);
-    }
 }
