@@ -2,6 +2,7 @@ package br.com.jaya.currencyconversionapi.controller;
 
 import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
+import br.com.jaya.currencyconversionapi.domain.dto.RequestDTO;
 import br.com.jaya.currencyconversionapi.service.CurrencyConversionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +22,16 @@ public class ConversionController {
     }
 
     @GetMapping
-    Mono<RatesResponseDTO> getRates() {
+    public Mono<RatesResponseDTO> getRates() {
         return service.findAll();
     }
 
-    @PostMapping(value = "/{originCurrency}/{value}/{finalCurrency}/{userId}")
-    Mono<Transaction> convert(@PathVariable String originCurrency,
-                              @PathVariable BigDecimal value,
-                              @PathVariable String finalCurrency,
-                              @PathVariable String userId) {
-        return service.convert(originCurrency, finalCurrency, value, userId);
+    @PostMapping
+    public Mono<Transaction> convert(@RequestBody RequestDTO requestDTO) {
+        return service.convert(requestDTO.getOriginCurrency(),
+                requestDTO.getFinalCurrency(),
+                requestDTO.getValue(),
+                requestDTO.getUserId());
     }
 
 }
