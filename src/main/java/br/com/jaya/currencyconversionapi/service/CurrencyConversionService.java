@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,7 +76,7 @@ public class CurrencyConversionService {
                                     .finalValue(finalValue)
                                     .originCurrency(originCurrency)
                                     .userId(userId)
-                                    .createdAt(Calendar.getInstance())
+                                    .createdAt(new Date())
                                     .build();
 
                             return transactionRepository.save(transaction);
