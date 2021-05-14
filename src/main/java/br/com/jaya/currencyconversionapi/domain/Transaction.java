@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
 
 @Builder
 @Document
@@ -36,7 +37,7 @@ public class Transaction {
     private BigDecimal conversionRate;
 
     @Setter
-    private Calendar createdAt;
+    private Date createdAt;
 
 
 }
