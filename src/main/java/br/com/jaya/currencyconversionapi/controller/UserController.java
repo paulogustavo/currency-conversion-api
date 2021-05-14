@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping
-    Flux<User> getAll() {
+    public Flux<User> getAll() {
         return service.all();
     }
 

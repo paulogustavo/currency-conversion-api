@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
@@ -20,6 +21,7 @@ public class CurrencyConversionApiApplication {
 	}
 
 	@Bean
+	@Profile("!test")
 	@Transactional
 	ApplicationRunner criandoUsuarios(UserRepository userRepository, UserService service) {
 		return args -> {
