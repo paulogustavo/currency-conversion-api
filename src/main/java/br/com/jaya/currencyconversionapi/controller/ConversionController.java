@@ -25,11 +25,12 @@ public class ConversionController {
         return service.findAll();
     }
 
-    @PostMapping(value = "/{originCurrency}/{value}/{finalCurrency}")
+    @PostMapping(value = "/{originCurrency}/{value}/{finalCurrency}/{userId}")
     Mono<Transaction> convert(@PathVariable String originCurrency,
                               @PathVariable BigDecimal value,
-                              @PathVariable String finalCurrency) {
-        return service.convert(originCurrency, finalCurrency, value);
+                              @PathVariable String finalCurrency,
+                              @PathVariable String userId) {
+        return service.convert(originCurrency, finalCurrency, value, userId);
     }
 
 }
