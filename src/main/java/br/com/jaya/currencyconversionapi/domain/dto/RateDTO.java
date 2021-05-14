@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.model.dto;
+package br.com.jaya.currencyconversionapi.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

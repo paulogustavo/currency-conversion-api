@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.model;
+package br.com.jaya.currencyconversionapi.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

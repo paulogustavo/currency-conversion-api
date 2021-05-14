@@ -1,6 +1,6 @@
 package br.com.jaya.currencyconversionapi.service;
 
-import br.com.jaya.currencyconversionapi.model.Transaction;
+import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

@@ -1,6 +1,6 @@
 package br.com.jaya.currencyconversionapi.controller;
 
-import br.com.jaya.currencyconversionapi.model.User;
+import br.com.jaya.currencyconversionapi.domain.User;
 import br.com.jaya.currencyconversionapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

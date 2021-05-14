@@ -1,6 +1,6 @@
 package br.com.jaya.currencyconversionapi;
 
-import br.com.jaya.currencyconversionapi.model.User;
+import br.com.jaya.currencyconversionapi.domain.User;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
 import br.com.jaya.currencyconversionapi.service.UserService;
 import org.springframework.boot.ApplicationRunner;

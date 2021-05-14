@@ -1,7 +1,7 @@
 package br.com.jaya.currencyconversionapi.controller;
 
-import br.com.jaya.currencyconversionapi.model.Transaction;
-import br.com.jaya.currencyconversionapi.model.dto.RatesResponseDTO;
+import br.com.jaya.currencyconversionapi.domain.Transaction;
+import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.service.CurrencyConversionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
 package br.com.jaya.currencyconversionapi.service;
 
 import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
-import br.com.jaya.currencyconversionapi.model.Transaction;
-import br.com.jaya.currencyconversionapi.model.dto.RatesResponseDTO;
+import br.com.jaya.currencyconversionapi.domain.Transaction;
+import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -59,7 +59,7 @@ public class CurrencyConversionService {
 
             BigDecimal conversionRate = finalValue.divide(originValue, RoundingMode.HALF_UP);
 
-            Transaction transaction = Transaction.builder()
+            var transaction = Transaction.builder()
                     .conversionRate(conversionRate)
                     .finalCurrency(finalCurrency)
                     .originValue(originValue)
@@ -67,8 +67,6 @@ public class CurrencyConversionService {
                     .originCurrency(originCurrency)
                     .createdAt(Calendar.getInstance())
                     .build();
-
-            System.out.println(transaction);
 
             return transactionRepository.save(transaction);
 
