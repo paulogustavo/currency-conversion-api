@@ -21,8 +21,8 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/{userId}")
-    public Flux<Transaction> getRates(@PathVariable String userId) {
-        return service.getByUserId(userId);
+    public Flux<Transaction> getTransactions(@PathVariable String userId) {
+        return service.getTransactionsByUserId(userId);
     }
 
 }

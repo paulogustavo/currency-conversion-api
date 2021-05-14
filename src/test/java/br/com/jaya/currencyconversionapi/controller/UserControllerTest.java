@@ -33,8 +33,8 @@ class UserControllerTest {
 
     @Test
     void testFindAllUsersShouldReturnOk() {
-        User user1 = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
-        User user2 = User.builder().id("609ecfbab66b6314c06af685").name("George").build();
+        var user1 = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
+        var user2 = User.builder().id("609ecfbab66b6314c06af685").name("George").build();
         List<User> users = new ArrayList<>();
         users.add(user1);
         users.add(user2);

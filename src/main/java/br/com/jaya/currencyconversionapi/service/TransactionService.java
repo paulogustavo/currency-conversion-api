@@ -19,7 +19,7 @@ public class TransactionService {
         this.userRepository = userRepository;
     }
 
-    public Flux<Transaction> getByUserId(String userId) {
+    public Flux<Transaction> getTransactionsByUserId(String userId) {
         if(userId == null || userId.isEmpty())
             return Flux.error(new CurrencyConversionException("User id not informed"));
         return userRepository.findById(userId)

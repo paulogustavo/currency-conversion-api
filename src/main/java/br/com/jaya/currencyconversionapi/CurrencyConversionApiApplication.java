@@ -2,7 +2,6 @@ package br.com.jaya.currencyconversionapi;
 
 import br.com.jaya.currencyconversionapi.domain.User;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
-import br.com.jaya.currencyconversionapi.service.UserService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +22,7 @@ public class CurrencyConversionApiApplication {
 	@Bean
 	@Profile("!test")
 	@Transactional
-	ApplicationRunner criandoUsuarios(UserRepository userRepository, UserService service) {
+	public ApplicationRunner criandoUsuarios(UserRepository userRepository) {
 		return args -> {
 			Stream<User> stream = Stream.of(new User("Paulo"),
 					new User("George"),
