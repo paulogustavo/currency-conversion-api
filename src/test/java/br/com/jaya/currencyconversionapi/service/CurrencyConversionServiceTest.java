@@ -144,6 +144,20 @@ class CurrencyConversionServiceTest {
         Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
     }
 
+    @Test
+    void testTryConvertSendingEqualCurrencies_ShouldThrowCustomException(){
+        Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
+        requestDTO.setFinalCurrency("USD");
+
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
+                .expectSubscription()
+                .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
+                        throwable.getMessage().equals("Origin and final currencies should not be equal")
+                ).verify();
+
+        Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
+    }
+
 
 
 
