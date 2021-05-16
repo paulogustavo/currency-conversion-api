@@ -40,6 +40,9 @@ public class CurrencyConversionService {
         if(finalCurrency.isEmpty()){
             return Mono.error(new CurrencyConversionException("Please, inform final currency"));
         }
+        if(userId == null){
+            return Mono.error(new CurrencyConversionException("User id should not be null"));
+        }
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
                 .flatMap(user ->

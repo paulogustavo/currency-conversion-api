@@ -101,6 +101,37 @@ class CurrencyConversionServiceTest {
         Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
     }
 
+    @Test
+    void testTryConvertSendingNullUserId_ShouldThrowCustomException(){
+        Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
+
+        requestDTO.setUserId(null);
+
+        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
+                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+                .expectSubscription()
+                .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
+                        throwable.getMessage().equals("User id should not be null")
+                ).verify();
+
+        Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
+    }
+
+    @Test
+    void testTryConvertSendingNonExistingUserId_ShouldThrowCustomException(){
+        Mockito.doReturn(Mono.empty()).when(userRepository).findById((String) Mockito.any());
+        Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
+
+        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
+                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+                .expectSubscription()
+                .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
+                        throwable.getMessage().equals("User not found")
+                ).verify();
+
+        Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
+    }
+
 
 
 
