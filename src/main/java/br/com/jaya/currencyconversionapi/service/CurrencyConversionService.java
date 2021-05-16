@@ -31,6 +31,9 @@ public class CurrencyConversionService {
     }
 
     public Mono<Transaction> convert(String originCurrency, String finalCurrency, BigDecimal originValue, String userId) {
+        if(originValue == null ){
+            return Mono.error(new CurrencyConversionException("Value informed should not be null"));
+        }
         if(originValue.compareTo(BigDecimal.ZERO) < 1 ){
             return Mono.error(new CurrencyConversionException("Value informed should be greater than zero"));
         }

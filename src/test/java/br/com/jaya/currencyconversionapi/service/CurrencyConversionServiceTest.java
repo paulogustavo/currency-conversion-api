@@ -102,6 +102,23 @@ class CurrencyConversionServiceTest {
     }
 
     @Test
+    void testTryConvertSendingNullOriginValue_ShouldThrowCustomException(){
+        Mockito.doReturn(Mono.just(user)).when(userRepository).findById((String) Mockito.any());
+        Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
+
+        requestDTO.setValue(null);
+
+        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
+                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+                .expectSubscription()
+                .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
+                        throwable.getMessage().equals("Value informed should not be null")
+                ).verify();
+
+        Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
+    }
+
+    @Test
     void testTryConvertSendingNullUserId_ShouldThrowCustomException(){
         Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
 
