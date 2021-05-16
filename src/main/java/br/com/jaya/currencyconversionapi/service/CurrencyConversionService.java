@@ -2,11 +2,9 @@ package br.com.jaya.currencyconversionapi.service;
 
 import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.domain.Transaction;
-import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -15,29 +13,21 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import static br.com.jaya.currencyconversionapi.service.RatesService.SYMBOLS;
+
 @Service
 public class CurrencyConversionService {
 
-    private static final String BASE_URL = "http://api.exchangeratesapi.io/";
-    private static final String ACCESS_KEY = "895cc6dc0e2066458ca38e7d7012cd73";
-    private static final String SYMBOLS = "USD,AUD,CAD,PLN,MXN,BRL,EUR,JPY";
-
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final RatesService ratesService;
 
-    public CurrencyConversionService(TransactionRepository transactionRepository, UserRepository userRepository) {
+    public CurrencyConversionService(TransactionRepository transactionRepository,
+                                     UserRepository userRepository,
+                                     RatesService ratesService) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
-    }
-
-    WebClient webClient = WebClient.create(BASE_URL);
-
-    public Mono<RatesResponseDTO> fetchRates() {
-        return webClient.get()
-                .uri("/latest?access_key=" + ACCESS_KEY + "&symbols=" + SYMBOLS + "&format=1")
-                .retrieve()
-                .bodyToMono(RatesResponseDTO.class)
-                .onErrorMap(ex -> new CurrencyConversionException("Failed to fetch rates."));
+        this.ratesService = ratesService;
     }
 
     public Mono<Transaction> convert(String originCurrency, String finalCurrency, BigDecimal originValue, String userId) {
@@ -53,7 +43,7 @@ public class CurrencyConversionService {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
                 .flatMap(user ->
-                        fetchRates().flatMap(ratesResponseDTO -> {
+                        ratesService.fetchRates().flatMap(ratesResponseDTO -> {
                             Map<String, BigDecimal> rates = ratesResponseDTO.getRates();
                             Set<String> keySet = rates.keySet();
                             if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(originCurrency))) {

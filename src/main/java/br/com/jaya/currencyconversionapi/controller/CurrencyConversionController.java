@@ -4,6 +4,7 @@ import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.domain.dto.RequestDTO;
 import br.com.jaya.currencyconversionapi.service.CurrencyConversionService;
+import br.com.jaya.currencyconversionapi.service.RatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -12,21 +13,24 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "/conversion")
 public class CurrencyConversionController {
 
-    private final CurrencyConversionService service;
+    private final CurrencyConversionService currencyConversionService;
+    private final RatesService ratesService;
 
     @Autowired
-    public CurrencyConversionController(CurrencyConversionService service) {
-        this.service = service;
+    public CurrencyConversionController(CurrencyConversionService currencyConversionService,
+                                        RatesService ratesService) {
+        this.currencyConversionService = currencyConversionService;
+        this.ratesService = ratesService;
     }
 
     @GetMapping(value = "/rates")
     public Mono<RatesResponseDTO> getRates() {
-        return service.fetchRates();
+        return ratesService.fetchRates();
     }
 
     @PostMapping
     public Mono<Transaction> convert(@RequestBody RequestDTO requestDTO) {
-        return service.convert(requestDTO.getOriginCurrency(),
+        return currencyConversionService.convert(requestDTO.getOriginCurrency(),
                 requestDTO.getFinalCurrency(),
                 requestDTO.getValue(),
                 requestDTO.getUserId());

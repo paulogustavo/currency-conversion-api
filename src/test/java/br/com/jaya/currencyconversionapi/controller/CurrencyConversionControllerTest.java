@@ -8,6 +8,7 @@ import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
 import br.com.jaya.currencyconversionapi.service.CurrencyConversionService;
+import br.com.jaya.currencyconversionapi.service.RatesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,10 @@ class CurrencyConversionControllerTest {
     UserRepository userRepository;
 
     @MockBean
-    CurrencyConversionService service;
+    CurrencyConversionService currencyConversionService;
+
+    @MockBean
+    RatesService ratesService;
 
     @Autowired
     private WebTestClient webClient;
@@ -62,9 +66,7 @@ class CurrencyConversionControllerTest {
 
     @Test
     void testFetchRatesShouldReturnOk() {
-
-
-        Mockito.when(service.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
+        Mockito.when(ratesService.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
 
         webClient.get()
                 .uri("/conversion/rates")
@@ -72,12 +74,12 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isOk()
                 .expectBody();
 
-        Mockito.verify(service, times(1)).fetchRates();
+        Mockito.verify(ratesService, times(1)).fetchRates();
     }
 
     @Test
     void testFetchRatesShouldThrowCustomException() {
-       Mockito.when(service.fetchRates()).thenReturn(Mono.error(new CurrencyConversionException("Failed to fetch rates")));
+       Mockito.when(ratesService.fetchRates()).thenReturn(Mono.error(new CurrencyConversionException("Failed to fetch rates")));
 
         webClient.get()
                 .uri("/conversion/rates")
@@ -85,13 +87,13 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody();
 
-        Mockito.verify(service, times(1)).fetchRates();
+        Mockito.verify(ratesService, times(1)).fetchRates();
     }
 
     @Test
     void testSaveTransactionWithNonPositiveOriginValueShouldThrowCustomException() {
         requestDTO.setValue(BigDecimal.ZERO);
-        Mockito.when(service.convert(requestDTO.getOriginCurrency(), requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        Mockito.when(currencyConversionService.convert(requestDTO.getOriginCurrency(), requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
                 .thenReturn(Mono.error(new CurrencyConversionException("Value informed should be greater than zero")));
 
         webClient.post()
@@ -101,7 +103,7 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody();
 
-        Mockito.verify(service, times(0)).fetchRates();
+        Mockito.verify(ratesService, times(0)).fetchRates();
     }
 
     //TransactionOk
@@ -121,7 +123,7 @@ class CurrencyConversionControllerTest {
 
         Mockito.when(transactionRepository.save(transaction)).thenReturn(Mono.just(transaction));
         Mockito.when(userRepository.findById("609ecfbab66b6314c06af684")).thenReturn(Mono.just(user));
-        Mockito.when(service.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
+        Mockito.when(ratesService.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
 
         webClient.post()
                 .uri("/conversion")
