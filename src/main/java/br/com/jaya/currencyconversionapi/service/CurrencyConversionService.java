@@ -20,7 +20,7 @@ public class CurrencyConversionService {
 
     private static final String BASE_URL = "http://api.exchangeratesapi.io/";
     private static final String ACCESS_KEY = "895cc6dc0e2066458ca38e7d7012cd73";
-    private static final String SYMBOLS = "USD,AUD,CAD,PLN,MXN,BRL,EUR";
+    private static final String SYMBOLS = "USD,AUD,CAD,PLN,MXN,BRL,EUR,JPY";
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;

@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -46,21 +45,26 @@ class CurrencyConversionControllerTest {
     private WebTestClient webClient;
 
     private RequestDTO requestDTO;
+    private RatesResponseDTO fetchRatesResponseDTO;
 
     @BeforeEach
     public void init(){
         requestDTO = new RequestDTO("USD",BigDecimal.TEN, "BRL", "609ecfbab66b6314c06af684");
+
+        fetchRatesResponseDTO = new RatesResponseDTO();
+        Map<String, BigDecimal> rates = new HashMap<>();
+        rates.put("BRL", new BigDecimal("6.403258"));
+        rates.put("USD", new BigDecimal("1.21459"));
+        rates.put("EUR", BigDecimal.ONE);
+        rates.put("JPY", new BigDecimal("132.845829"));
+        fetchRatesResponseDTO.setRates(rates);
     }
 
     @Test
     void testFetchRatesShouldReturnOk() {
-        RatesResponseDTO responseDTO = new RatesResponseDTO();
-        Map<String, BigDecimal> rates = new HashMap<>();
-        rates.put("BRL", BigDecimal.ONE);
-        rates.put("USD", BigDecimal.TEN);
-        responseDTO.setRates(rates);
 
-        Mockito.when(service.fetchRates()).thenReturn(Mono.just(responseDTO));
+
+        Mockito.when(service.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
 
         webClient.get()
                 .uri("/conversion/rates")
@@ -115,19 +119,17 @@ class CurrencyConversionControllerTest {
                 .createdAt(new Date())
                 .build();
 
-        List<Transaction> transactions = new ArrayList<>();
-        transactions.add(transaction);
-
-        Mockito.when(transactionRepository.findAllByUserId("609ecfbab66b6314c06af684")).thenReturn(Flux.fromIterable(transactions));
+        Mockito.when(transactionRepository.save(transaction)).thenReturn(Mono.just(transaction));
         Mockito.when(userRepository.findById("609ecfbab66b6314c06af684")).thenReturn(Mono.just(user));
+        Mockito.when(service.fetchRates()).thenReturn(Mono.just(fetchRatesResponseDTO));
 
-        webClient.get()
-                .uri("/transactions/609ecfbab66b6314c06af684")
+        webClient.post()
+                .uri("/conversion")
+                .bodyValue(requestDTO)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody();
 
-        Mockito.verify(transactionRepository, times(1)).findAllByUserId("609ecfbab66b6314c06af684");
     }
 
 }
