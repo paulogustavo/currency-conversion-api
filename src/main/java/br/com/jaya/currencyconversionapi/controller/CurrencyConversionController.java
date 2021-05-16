@@ -21,7 +21,7 @@ public class CurrencyConversionController {
 
     @GetMapping(value = "/rates")
     public Mono<RatesResponseDTO> getRates() {
-        return service.findAll();
+        return service.fetchRates();
     }
 
     @PostMapping

@@ -32,7 +32,7 @@ public class CurrencyConversionService {
 
     WebClient webClient = WebClient.create(BASE_URL);
 
-    public Mono<RatesResponseDTO> findAll() {
+    public Mono<RatesResponseDTO> fetchRates() {
         return webClient.get()
                 .uri("/latest?access_key=" + ACCESS_KEY + "&symbols=" + SYMBOLS + "&format=1")
                 .retrieve()
@@ -53,7 +53,7 @@ public class CurrencyConversionService {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
                 .flatMap(user ->
-                        findAll().flatMap(ratesResponseDTO -> {
+                        fetchRates().flatMap(ratesResponseDTO -> {
                             Map<String, BigDecimal> rates = ratesResponseDTO.getRates();
                             Set<String> keySet = rates.keySet();
                             if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(originCurrency))) {

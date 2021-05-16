@@ -60,7 +60,7 @@ class CurrencyConversionControllerTest {
         rates.put("USD", BigDecimal.TEN);
         responseDTO.setRates(rates);
 
-        Mockito.when(service.findAll()).thenReturn(Mono.just(responseDTO));
+        Mockito.when(service.fetchRates()).thenReturn(Mono.just(responseDTO));
 
         webClient.get()
                 .uri("/conversion/rates")
@@ -68,12 +68,12 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isOk()
                 .expectBody();
 
-        Mockito.verify(service, times(1)).findAll();
+        Mockito.verify(service, times(1)).fetchRates();
     }
 
     @Test
     void testFetchRatesShouldThrowCustomException() {
-       Mockito.when(service.findAll()).thenReturn(Mono.error(new CurrencyConversionException("Failed to fetch rates")));
+       Mockito.when(service.fetchRates()).thenReturn(Mono.error(new CurrencyConversionException("Failed to fetch rates")));
 
         webClient.get()
                 .uri("/conversion/rates")
@@ -81,7 +81,7 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody();
 
-        Mockito.verify(service, times(1)).findAll();
+        Mockito.verify(service, times(1)).fetchRates();
     }
 
     @Test
@@ -97,7 +97,7 @@ class CurrencyConversionControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody();
 
-        Mockito.verify(service, times(0)).findAll();
+        Mockito.verify(service, times(0)).fetchRates();
     }
 
     //TransactionOk
