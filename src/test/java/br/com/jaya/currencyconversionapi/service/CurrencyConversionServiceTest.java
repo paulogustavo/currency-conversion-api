@@ -4,6 +4,7 @@ import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.domain.User;
 import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
 import br.com.jaya.currencyconversionapi.domain.dto.RequestDTO;
+import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,8 @@ class CurrencyConversionServiceTest {
 
     private RequestDTO requestDTO;
     private RatesResponseDTO fetchRatesResponseDTO;
+    private User user;
+    private Transaction transaction;
 
     @BeforeEach
     public void init(){
@@ -52,12 +55,9 @@ class CurrencyConversionServiceTest {
         rates.put("EUR", BigDecimal.ONE);
         rates.put("JPY", new BigDecimal("132.845829"));
         fetchRatesResponseDTO.setRates(rates);
-    }
 
-    @Test
-    void testSaveTransactionSuccessful(){
-        User user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
-        Transaction transaction = Transaction.builder()
+        user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
+        transaction = Transaction.builder()
                 .conversionRate(new BigDecimal("5.4"))
                 .finalCurrency("BRL")
                 .originValue(BigDecimal.TEN)
@@ -66,7 +66,10 @@ class CurrencyConversionServiceTest {
                 .userId("609ecfbab66b6314c06af684")
                 .createdAt(new Date())
                 .build();
+    }
 
+    @Test
+    void testSaveTransaction_Successful(){
         Mockito.doReturn(Mono.just(transaction)).when(transactionRepository).save(Mockito.any());
         Mockito.doReturn(Mono.just(user)).when(userRepository).findById((String) Mockito.any());
         Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
@@ -79,6 +82,23 @@ class CurrencyConversionServiceTest {
                 .verify();
 
        Mockito.verify(transactionRepository, times(1)).save(Mockito.any());
+    }
+
+    @Test
+    void testTryConvertSendingNonPositiveOriginValue_ShouldThrowCustomException(){
+        Mockito.doReturn(Mono.just(user)).when(userRepository).findById((String) Mockito.any());
+        Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
+
+        requestDTO.setValue(BigDecimal.ZERO);
+
+        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
+                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+                .expectSubscription()
+                .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
+                        throwable.getMessage().equals("Value informed should be greater than zero")
+                ).verify();
+
+        Mockito.verify(transactionRepository, times(0)).save(Mockito.any());
     }
 
 
