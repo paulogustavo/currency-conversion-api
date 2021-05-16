@@ -8,20 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
-
 @RestController
 @RequestMapping(value = "/conversion")
-public class ConversionController {
+public class CurrencyConversionController {
 
     private final CurrencyConversionService service;
 
     @Autowired
-    public ConversionController(CurrencyConversionService service) {
+    public CurrencyConversionController(CurrencyConversionService service) {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping(value = "/rates")
     public Mono<RatesResponseDTO> getRates() {
         return service.findAll();
     }

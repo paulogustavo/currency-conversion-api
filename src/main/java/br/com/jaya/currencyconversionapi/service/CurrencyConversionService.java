@@ -36,7 +36,8 @@ public class CurrencyConversionService {
         return webClient.get()
                 .uri("/latest?access_key=" + ACCESS_KEY + "&symbols=" + SYMBOLS + "&format=1")
                 .retrieve()
-                .bodyToMono(RatesResponseDTO.class);
+                .bodyToMono(RatesResponseDTO.class)
+                .onErrorMap(ex -> new CurrencyConversionException("Failed to fetch rates."));
     }
 
     public Mono<Transaction> convert(String originCurrency, String finalCurrency, BigDecimal originValue, String userId) {

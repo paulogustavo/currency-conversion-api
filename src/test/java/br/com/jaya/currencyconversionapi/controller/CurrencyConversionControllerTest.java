@@ -2,9 +2,13 @@ package br.com.jaya.currencyconversionapi.controller;
 
 import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.domain.User;
+import br.com.jaya.currencyconversionapi.domain.dto.RatesResponseDTO;
+import br.com.jaya.currencyconversionapi.domain.dto.RequestDTO;
+import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
-import br.com.jaya.currencyconversionapi.service.TransactionService;
+import br.com.jaya.currencyconversionapi.service.CurrencyConversionService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -19,17 +23,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(controllers = TransactionController.class)
-@Import(TransactionService.class)
+@WebFluxTest(controllers = CurrencyConversionController.class)
+@Import(CurrencyConversionService.class)
 @ActiveProfiles("test")
-class TransactionControllerTest {
+class CurrencyConversionControllerTest {
 
     @MockBean
     TransactionRepository transactionRepository;
@@ -37,13 +39,20 @@ class TransactionControllerTest {
     @MockBean
     UserRepository userRepository;
 
+    @MockBean
+    CurrencyConversionService service;
+
     @Autowired
     private WebTestClient webClient;
 
-    @Test
-    void testGetTransactionsByUserIdShouldReturnOk() {
-        var user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
-        var transaction = Transaction.builder()
+    private Transaction transaction;
+    private User user;
+    private RequestDTO requestDTO;
+
+    @BeforeEach
+    public void init(){
+        /*user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
+        transaction = Transaction.builder()
                 .conversionRate(new BigDecimal("5.4"))
                 .finalCurrency("BRL")
                 .originValue(BigDecimal.TEN)
@@ -51,7 +60,46 @@ class TransactionControllerTest {
                 .originCurrency("USD")
                 .userId("609ecfbab66b6314c06af684")
                 .createdAt(new Date())
-                .build();
+                .build();*/
+        requestDTO = new RequestDTO("USD",BigDecimal.TEN, "USD", "609ecfbab66b6314c06af684");
+    }
+
+    @Test
+    void testFetchRatesShouldReturnOk() {
+        RatesResponseDTO responseDTO = new RatesResponseDTO();
+        Map<String, BigDecimal> rates = new HashMap<>();
+        rates.put("BRL", BigDecimal.ONE);
+        rates.put("USD", BigDecimal.TEN);
+        responseDTO.setRates(rates);
+
+        Mockito.when(service.findAll()).thenReturn(Mono.just(responseDTO));
+
+        webClient.get()
+                .uri("/conversion/rates")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody();
+
+        Mockito.verify(service, times(1)).findAll();
+    }
+
+    @Test
+    void testFetchRatesShouldThrowCustomException() {
+       Mockito.when(service.findAll()).thenReturn(Mono.error(new CurrencyConversionException("Failed to fetch rates")));
+
+        webClient.get()
+                .uri("/conversion/rates")
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody();
+
+        Mockito.verify(service, times(1)).findAll();
+    }
+
+    //TransactionOk
+    /*@Test
+    void testSaveTransactionShouldReturnOk() {
+
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -65,6 +113,6 @@ class TransactionControllerTest {
                 .expectBody();
 
         Mockito.verify(transactionRepository, times(1)).findAllByUserId("609ecfbab66b6314c06af684");
-    }
+    }*/
 
 }
