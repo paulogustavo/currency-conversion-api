@@ -61,7 +61,7 @@ class CurrencyConversionControllerTest {
                 .userId("609ecfbab66b6314c06af684")
                 .createdAt(new Date())
                 .build();*/
-        requestDTO = new RequestDTO("USD",BigDecimal.TEN, "USD", "609ecfbab66b6314c06af684");
+        requestDTO = new RequestDTO("USD",BigDecimal.TEN, "BRL", "609ecfbab66b6314c06af684");
     }
 
     @Test
@@ -94,6 +94,22 @@ class CurrencyConversionControllerTest {
                 .expectBody();
 
         Mockito.verify(service, times(1)).findAll();
+    }
+
+    @Test
+    void testSaveTransactionWithNonPositiveOriginValueShouldThrowCustomException() {
+        requestDTO.setValue(BigDecimal.ZERO);
+        Mockito.when(service.convert(requestDTO.getOriginCurrency(), requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+                .thenReturn(Mono.error(new CurrencyConversionException("Value informed should be greater than zero")));
+
+        webClient.post()
+                .uri("/conversion")
+                .bodyValue(requestDTO)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody();
+
+        Mockito.verify(service, times(0)).findAll();
     }
 
     //TransactionOk
