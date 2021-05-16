@@ -90,22 +90,6 @@ class CurrencyConversionControllerTest {
         Mockito.verify(ratesService, times(1)).fetchRates();
     }
 
-    @Test
-    void testSaveTransactionWithNonPositiveOriginValueShouldThrowCustomException() {
-        requestDTO.setValue(BigDecimal.ZERO);
-        Mockito.when(currencyConversionService.convert(requestDTO.getOriginCurrency(), requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
-                .thenReturn(Mono.error(new CurrencyConversionException("Value informed should be greater than zero")));
-
-        webClient.post()
-                .uri("/conversion")
-                .bodyValue(requestDTO)
-                .exchange()
-                .expectStatus().isBadRequest()
-                .expectBody();
-
-        Mockito.verify(ratesService, times(0)).fetchRates();
-    }
-
     //TransactionOk
     @Test
     void testSaveTransactionShouldReturnOk() {

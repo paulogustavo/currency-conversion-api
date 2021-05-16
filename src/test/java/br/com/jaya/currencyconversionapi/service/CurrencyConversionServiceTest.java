@@ -74,8 +74,7 @@ class CurrencyConversionServiceTest {
         Mockito.doReturn(Mono.just(user)).when(userRepository).findById((String) Mockito.any());
         Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
 
-        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
                 .expectSubscription()
                 .expectNext(transaction)
                 .expectComplete()
@@ -91,8 +90,7 @@ class CurrencyConversionServiceTest {
 
         requestDTO.setValue(BigDecimal.ZERO);
 
-        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
                 .expectSubscription()
                 .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
                         throwable.getMessage().equals("Value informed should be greater than zero")
@@ -108,8 +106,7 @@ class CurrencyConversionServiceTest {
 
         requestDTO.setValue(null);
 
-        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
                 .expectSubscription()
                 .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
                         throwable.getMessage().equals("Value informed should not be null")
@@ -124,8 +121,7 @@ class CurrencyConversionServiceTest {
 
         requestDTO.setUserId(null);
 
-        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
                 .expectSubscription()
                 .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
                         throwable.getMessage().equals("User id should not be null")
@@ -139,8 +135,7 @@ class CurrencyConversionServiceTest {
         Mockito.doReturn(Mono.empty()).when(userRepository).findById((String) Mockito.any());
         Mockito.doReturn(Mono.just(fetchRatesResponseDTO)).when(ratesService).fetchRates();
 
-        StepVerifier.create(currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(), requestDTO.getValue(), requestDTO.getUserId()))
+        StepVerifier.create(currencyConversionService.convert(requestDTO))
                 .expectSubscription()
                 .expectErrorMatches(throwable -> throwable instanceof CurrencyConversionException &&
                         throwable.getMessage().equals("User not found")

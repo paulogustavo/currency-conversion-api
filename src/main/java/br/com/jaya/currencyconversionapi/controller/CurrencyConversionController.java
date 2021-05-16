@@ -30,10 +30,7 @@ public class CurrencyConversionController {
 
     @PostMapping
     public Mono<Transaction> convert(@RequestBody RequestDTO requestDTO) {
-        return currencyConversionService.convert(requestDTO.getOriginCurrency(),
-                requestDTO.getFinalCurrency(),
-                requestDTO.getValue(),
-                requestDTO.getUserId());
+        return currencyConversionService.convert(requestDTO);
     }
 
 }
