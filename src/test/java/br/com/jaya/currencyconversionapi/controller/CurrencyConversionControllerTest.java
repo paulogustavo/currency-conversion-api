@@ -45,22 +45,10 @@ class CurrencyConversionControllerTest {
     @Autowired
     private WebTestClient webClient;
 
-    private Transaction transaction;
-    private User user;
     private RequestDTO requestDTO;
 
     @BeforeEach
     public void init(){
-        /*user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
-        transaction = Transaction.builder()
-                .conversionRate(new BigDecimal("5.4"))
-                .finalCurrency("BRL")
-                .originValue(BigDecimal.TEN)
-                .finalValue(new BigDecimal("54.00"))
-                .originCurrency("USD")
-                .userId("609ecfbab66b6314c06af684")
-                .createdAt(new Date())
-                .build();*/
         requestDTO = new RequestDTO("USD",BigDecimal.TEN, "BRL", "609ecfbab66b6314c06af684");
     }
 
@@ -113,8 +101,19 @@ class CurrencyConversionControllerTest {
     }
 
     //TransactionOk
-    /*@Test
+    @Test
     void testSaveTransactionShouldReturnOk() {
+
+        User user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
+        Transaction transaction = Transaction.builder()
+                .conversionRate(new BigDecimal("5.4"))
+                .finalCurrency("BRL")
+                .originValue(BigDecimal.TEN)
+                .finalValue(new BigDecimal("54.00"))
+                .originCurrency("USD")
+                .userId("609ecfbab66b6314c06af684")
+                .createdAt(new Date())
+                .build();
 
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
@@ -129,6 +128,6 @@ class CurrencyConversionControllerTest {
                 .expectBody();
 
         Mockito.verify(transactionRepository, times(1)).findAllByUserId("609ecfbab66b6314c06af684");
-    }*/
+    }
 
 }
