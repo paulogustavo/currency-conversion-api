@@ -2,7 +2,6 @@ package br.com.jaya.currencyconversionapi.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -17,4 +16,13 @@ public class RequestDTO {
     private String finalCurrency;
     private String userId;
 
+    @Override
+    public String toString() {
+        return "RequestDTO{" +
+                "originCurrency='" + originCurrency + '\'' +
+                ", value=" + value +
+                ", finalCurrency='" + finalCurrency + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

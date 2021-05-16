@@ -6,6 +6,8 @@ import br.com.jaya.currencyconversionapi.exception.CurrencyConversionException;
 import br.com.jaya.currencyconversionapi.domain.Transaction;
 import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -19,6 +21,8 @@ import static br.com.jaya.currencyconversionapi.service.RatesService.SYMBOLS;
 
 @Service
 public class CurrencyConversionService {
+
+    Logger logger = LoggerFactory.getLogger(CurrencyConversionService.class);
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
@@ -34,7 +38,10 @@ public class CurrencyConversionService {
 
     public Mono<Transaction> convert(RequestDTO requestDTO) {
         return validateInput(requestDTO)
-                .doOnError(Mono::error)
+                .doOnError(ex -> {
+                    logger.error("{}. Data sent: {}", ex.getMessage(), requestDTO);
+                    Mono.error(ex);
+                })
                 .flatMap(validUserId -> userRepository.findById(validUserId)
                         .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
                         .flatMap(user ->
@@ -43,8 +50,12 @@ public class CurrencyConversionService {
                                                 .flatMap(currenciesKeySet ->
                                                         validatePresenceOfInformedCurrencies(requestDTO.getOriginCurrency(),
                                                                 requestDTO.getFinalCurrency(), currenciesKeySet)
-                                                        .doOnError(Mono::error)
-                                                        .flatMap(ketSet -> convertSavingTransaction(ratesDTO.getRates(), requestDTO)))
+                                                                .doOnError(Mono::error)
+                                                                .flatMap(ketSet -> convertSavingTransaction(ratesDTO.getRates(), requestDTO)
+                                                                        .flatMap(transaction -> {
+                                                                            logger.info("Transaction created: {}", transaction);
+                                                                            return Mono.just(transaction);
+                                                                        })))
 
 
                                         )));

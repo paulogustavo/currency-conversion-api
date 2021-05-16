@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 
 @Builder
@@ -39,5 +38,17 @@ public class Transaction {
     @Setter
     private Date createdAt;
 
-
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", originCurrency='" + originCurrency + '\'' +
+                ", finalCurrency='" + finalCurrency + '\'' +
+                ", originValue=" + originValue +
+                ", finalValue=" + finalValue +
+                ", conversionRate=" + conversionRate +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
