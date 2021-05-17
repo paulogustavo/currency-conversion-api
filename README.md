@@ -7,6 +7,11 @@ Spring WebFlux was chosen as main technology because of its non-blocking aspect 
 
 The project itself is divided in three layers: Controllers, Services and Repositories.
 
+## Requirements
+
+- Java 11
+- Maven 
+
 ## Installation
 
 Excute the following command in the project root:
