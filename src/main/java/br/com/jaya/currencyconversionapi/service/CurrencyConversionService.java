@@ -42,23 +42,20 @@ public class CurrencyConversionService {
                     logger.error("{}. Data sent: {}", ex.getMessage(), requestDTO);
                     Mono.error(ex);
                 })
-                .flatMap(validUserId -> userRepository.findById(validUserId)
-                        .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
-                        .flatMap(user ->
-                                ratesService.fetchRates()
-                                        .flatMap(ratesDTO -> getKeySetForValidation(ratesDTO)
-                                                .flatMap(currenciesKeySet ->
-                                                        validatePresenceOfInformedCurrencies(requestDTO.getOriginCurrency(),
-                                                                requestDTO.getFinalCurrency(), currenciesKeySet)
-                                                                .doOnError(Mono::error)
-                                                                .flatMap(ketSet -> convertSavingTransaction(ratesDTO.getRates(), requestDTO)
-                                                                        .flatMap(transaction -> {
-                                                                            logger.info("Transaction created: {}", transaction);
-                                                                            return Mono.just(transaction);
-                                                                        })))
-
-
-                                        )));
+                .flatMap(userRepository::findById)
+                .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
+                .flatMap(user -> ratesService.fetchRates())
+                .flatMap(ratesDTO -> getKeySetForValidation(ratesDTO)
+                        .flatMap(currenciesKeySet ->
+                                validatePresenceOfInformedCurrencies(requestDTO.getOriginCurrency(),
+                                        requestDTO.getFinalCurrency(), currenciesKeySet)
+                                        .doOnError(Mono::error)
+                                        .flatMap(ketSet -> convertSavingTransaction(ratesDTO.getRates(), requestDTO))
+                                        .flatMap(transaction -> {
+                                            logger.info("Transaction created: {}", transaction);
+                                            return Mono.just(transaction);
+                                        }))
+                );
     }
 
     private Mono<String> validateInput(RequestDTO requestDTO) {
