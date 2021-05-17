@@ -29,3 +29,6 @@ As soon as the application is up and running you can go to the API's swagger int
 ## Heroku
 
 This application is also available on Heroku in this [link](https://currency-conversion-pg.herokuapp.com/swagger-ui/index.html).
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
