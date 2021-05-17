@@ -39,11 +39,11 @@ class TransactionServiceTest {
         var user = User.builder().id("609ecfbab66b6314c06af684").name("Paulo").build();
 
         var transaction = Transaction.builder()
-                .conversionRate(new BigDecimal("5.4"))
+                .conversionRate(new BigDecimal("5.27309783152"))
+                .originCurrency("USD")
                 .finalCurrency("BRL")
                 .originValue(BigDecimal.TEN)
-                .finalValue(new BigDecimal("54.00"))
-                .originCurrency("USD")
+                .finalValue(new BigDecimal("52.730978315204"))
                 .userId("609ecfbab66b6314c06af684")
                 .createdAt(new Date())
                 .build();
