@@ -1,7 +1,31 @@
-"# currency-conversion-api" 
+# Currency Conversion API
 
-http://localhost:8080/swagger-ui/index.html
+This Spring WebFlux API provides an endpoint to convert a value from one currency to another. Currencies available for conversion: USD, AUD, CAD, PLN, MXN, BRL, EUR, and JPY.
+It consumes another [API](http://api.exchangeratesapi.io) to fetch the conversion rates (base currency: EUR).
 
-https://currency-conversion-pg.herokuapp.com/swagger-ui/index.html
+## Installation
 
-http://api.exchangeratesapi.io/latest?access_key=895cc6dc0e2066458ca38e7d7012cd73&symbols=USD,AUD,CAD,PLN,MXN,BRL&format=1
+Excute the following command in the project root:
+
+```bash
+mvn spring-boot:run
+```
+
+This command will run the project but in the first time of its excecution, it will download all maven dependencies including an embedded Mongodb.
+
+Mongodb is setup to listen to on port 54540 and the Netty server on port 8080.
+
+At the application startup 4 users are created: Paulo, Raul, Emanuel and George.
+
+## Usage
+
+As soon as the application is up and running you can go to the API's swagger interface available at http://localhost:8080/swagger-ui/index.html where you can find several endpoints to perform the following actions:
+
+- GET list all users
+- GET list all transactions by user id
+- GET list conversion rates from Euro to the final currency
+- POST conversion endpoind
+
+## Heroku
+
+This application is also available on Heroku in this [link](https://currency-conversion-pg.herokuapp.com/swagger-ui/index.html).
