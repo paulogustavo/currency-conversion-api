@@ -106,10 +106,10 @@ public class CurrencyConversionService {
     }
 
     private Mono<Transaction> convertSavingTransaction(Map<String, BigDecimal> rates, RequestDTO requestDTO) {
-        BigDecimal originToEUR = rates.get(requestDTO.getOriginCurrency());
-        BigDecimal euroValue = requestDTO.getValue().divide(originToEUR, RoundingMode.HALF_UP);
-        BigDecimal eurToFinalCurrency = rates.get(requestDTO.getFinalCurrency());
-        BigDecimal finalValue = euroValue.multiply(eurToFinalCurrency);
+        BigDecimal rateEuroToOriginCurrency = rates.get(requestDTO.getOriginCurrency());
+        BigDecimal euroValue = requestDTO.getValue().divide(rateEuroToOriginCurrency, 6, RoundingMode.HALF_UP);
+        BigDecimal rateEuroToFinalCurrency = rates.get(requestDTO.getFinalCurrency());
+        BigDecimal finalValue = euroValue.multiply(rateEuroToFinalCurrency);
         BigDecimal conversionRate = finalValue.divide(requestDTO.getValue(), RoundingMode.HALF_UP);
 
         var transaction = Transaction.builder()
