@@ -4,7 +4,7 @@ import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionD
 import br.com.jaya.currencyconversionapi.domain.conversion.model.Transaction;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "spring")
 public interface TransactionMapper {
 
     TransactionDto map(Transaction toMap);

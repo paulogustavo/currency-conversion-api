@@ -6,7 +6,7 @@ import br.com.jaya.currencyconversionapi.domain.conversion.model.ConversionReque
 import br.com.jaya.currencyconversionapi.domain.conversion.model.Transaction;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "spring")
 public interface ConversionMapper {
 
     ConversionRequest map(ConversionRequestDto toMap);

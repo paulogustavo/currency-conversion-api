@@ -3,11 +3,15 @@ package br.com.jaya.currencyconversionapi.domain.conversion.service;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.ConversionRequest;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.Transaction;
-import br.com.jaya.currencyconversionapi.domain.conversion.repository.ConversionRepository;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.TransactionRepository;
 import br.com.jaya.currencyconversionapi.domain.user.repository.UserRepository;
 import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -19,13 +23,13 @@ import java.util.Set;
 
 import static br.com.jaya.currencyconversionapi.infrastructure.repository.RatesRepositoryImpl.SYMBOLS;
 
-
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CurrencyConversionService {
-    private ConversionRepository conversionRepository;
-    private UserRepository userRepository;
-    private RatesRepository ratesRepository;
-    private TransactionRepository transactionRepository;
+    UserRepository userRepository;
+    RatesRepository ratesRepository;
+    TransactionRepository transactionRepository;
 
     public Mono<Transaction> convert(ConversionRequest conversionRequest){
         return userRepository.findById(conversionRequest.getUserId())
@@ -42,7 +46,6 @@ public class CurrencyConversionService {
                                     return Mono.just(transaction);
                                 }))
                 );
-        //return conversionRepository.convert(conversionRequest);
     }
 
     private Mono<Set<String>> validatePresenceOfInformedCurrencies(String originCurrency, String finalCurrency, Set<String> keySet) {

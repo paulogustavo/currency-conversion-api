@@ -5,22 +5,23 @@ import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionD
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.ConversionMapper;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.TransactionMapper;
 import br.com.jaya.currencyconversionapi.domain.conversion.service.CurrencyConversionService;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-@Data
+import javax.enterprise.context.ApplicationScoped;
+
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ConversionApplicationService {
 
-    private CurrencyConversionService currencyConversionService;
-    private ConversionMapper conversionMapper;
-    private TransactionMapper transactionMapper;
-
+    CurrencyConversionService currencyConversionService;
+    ConversionMapper conversionMapper;
+    TransactionMapper transactionMapper;
 
     public Mono<TransactionDto> convert(ConversionRequestDto conversionRequestDto){
-        //TODO executar validação
-
-        return currencyConversionService.convert(conversionMapper.map(conversionRequestDto)).map(transaction -> transactionMapper.map(transaction));
+        return currencyConversionService.convert(conversionMapper.map(conversionRequestDto)).map(transactionMapper::map);
     }
 }

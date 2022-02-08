@@ -3,11 +3,16 @@ package br.com.jaya.currencyconversionapi.infrastructure.repository;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
 import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
-import org.springframework.stereotype.Service;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-@Service
+@Repository
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatesRepositoryImpl implements RatesRepository {
 
     public static final String BASE_URL = "http://api.exchangeratesapi.io/";

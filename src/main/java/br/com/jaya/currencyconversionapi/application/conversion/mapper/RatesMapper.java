@@ -4,7 +4,7 @@ import br.com.jaya.currencyconversionapi.application.conversion.dto.RatesRespons
 import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "spring")
 public interface RatesMapper {
 
     RatesResponseDto map(RatesResponse toMap);

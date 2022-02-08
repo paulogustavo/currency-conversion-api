@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "/conversion")
 public class CurrencyConversionController {
 
-    /*private final ConversionApplicationService currencyConversionService;
+    private final ConversionApplicationService currencyConversionService;
     private final RatesApplicationService ratesApplicationService;
 
     @Autowired
@@ -31,6 +31,6 @@ public class CurrencyConversionController {
     @PostMapping
     public Mono<TransactionDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
         return currencyConversionService.convert(conversionRequestDto);
-    }*/
+    }
 
 }
