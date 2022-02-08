@@ -1,41 +1,16 @@
 package br.com.jaya.currencyconversionapi.controller;
 
-import br.com.jaya.currencyconversionapi.domain.Transaction;
-import br.com.jaya.currencyconversionapi.domain.User;
-import br.com.jaya.currencyconversionapi.repository.TransactionRepository;
-import br.com.jaya.currencyconversionapi.repository.UserRepository;
-import br.com.jaya.currencyconversionapi.service.TransactionService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.mockito.Mockito.times;
-
-@ExtendWith(SpringExtension.class)
+/*@ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = TransactionController.class)
 @Import(TransactionService.class)
 @ActiveProfiles("test")
 class TransactionControllerTest {
 
     @MockBean
-    TransactionRepository transactionRepository;
+    MongoTransactionRepository transactionRepository;
 
     @MockBean
-    UserRepository userRepository;
+    MongoUserRepository userRepository;
 
     @Autowired
     private WebTestClient webClient;
@@ -67,4 +42,4 @@ class TransactionControllerTest {
         Mockito.verify(transactionRepository, times(1)).findAllByUserId("609ecfbab66b6314c06af684");
     }
 
-}
+}*/
