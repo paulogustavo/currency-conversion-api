@@ -22,6 +22,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(CurrencyConversionException.class)
     public ResponseEntity<Object> handleCustomException(CurrencyConversionException ex) {
+        ex.printStackTrace();
         var apiError = ApiError.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
@@ -31,6 +32,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        ex.printStackTrace();
         var apiError = ApiError.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())

@@ -18,8 +18,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import static br.com.jaya.currencyconversionapi.infrastructure.repository.RatesRepositoryImpl.SYMBOLS;
-
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -47,11 +45,11 @@ public class CurrencyConversionService {
 
     private Mono<Set<String>> validatePresenceOfInformedCurrencies(String originCurrency, String finalCurrency, Set<String> keySet) {
         if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(originCurrency))) {
-            return Mono.error(new CurrencyConversionException("Origin currency not found. Only " + SYMBOLS + " permitted."));
+            return Mono.error(new CurrencyConversionException("Origin currency not found."));
         }
 
         if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(finalCurrency))) {
-            return Mono.error(new CurrencyConversionException("Final currency not found. Only " + SYMBOLS + " permitted."));
+            return Mono.error(new CurrencyConversionException("Final currency not found."));
         }
 
         return Mono.just(keySet);

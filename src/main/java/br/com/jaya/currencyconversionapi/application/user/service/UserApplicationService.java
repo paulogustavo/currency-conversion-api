@@ -5,13 +5,8 @@ import br.com.jaya.currencyconversionapi.application.user.mapper.UserMapper;
 import br.com.jaya.currencyconversionapi.domain.user.service.UserService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @Service
 @RequiredArgsConstructor

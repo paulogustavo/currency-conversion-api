@@ -4,29 +4,30 @@ import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
 import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Repository
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatesRepositoryImpl implements RatesRepository {
 
-    public static final String BASE_URL = "http://api.exchangeratesapi.io/";
-    public static final String ACCESS_KEY = "895cc6dc0e2066458ca38e7d7012cd73";
-    public static final String SYMBOLS = "USD,AUD,CAD,PLN,MXN,BRL,EUR,JPY";
-
-    WebClient webClient = WebClient.create(BASE_URL);
+    @Value("${rates.url}")
+    String url;
 
     public Mono<RatesResponse> fetchRates() {
-        return webClient.get()
-                .uri("/latest?access_key=" + ACCESS_KEY + "&symbols=" + SYMBOLS + "&format=1")
+        var ratesWebClient = WebClient.create(url);
+        return ratesWebClient.get()
                 .retrieve()
                 .bodyToMono(RatesResponse.class)
-                .onErrorMap(ex -> new CurrencyConversionException("Failed to fetch rates."));
+                .onErrorMap(ex -> {
+                    ex.printStackTrace();
+                    return new CurrencyConversionException("Failed to fetch rates.");
+                });
     }
 
 }
