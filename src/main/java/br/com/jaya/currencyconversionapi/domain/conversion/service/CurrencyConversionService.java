@@ -8,13 +8,10 @@ import br.com.jaya.currencyconversionapi.domain.conversion.repository.Transactio
 import br.com.jaya.currencyconversionapi.domain.user.repository.UserRepository;
 import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -37,8 +34,8 @@ public class CurrencyConversionService {
                 .flatMap(user -> ratesRepository.fetchRates())
                 .flatMap(rates -> getKeySetForValidation(rates)
                 .flatMap(currenciesKeySet ->
-                        validatePresenceOfInformedCurrencies(conversionRequest.getOriginCurrency(),
-                                conversionRequest.getFinalCurrency(), currenciesKeySet)
+                        validatePresenceOfInformedCurrencies(conversionRequest.getOriginCurrency().getDescription(),
+                                conversionRequest.getFinalCurrency().getDescription(), currenciesKeySet)
                                 .doOnError(Mono::error)
                                 .flatMap(ketSet -> convertSavingTransaction(rates.getRates(), conversionRequest))
                                 .flatMap(transaction -> {
@@ -67,18 +64,18 @@ public class CurrencyConversionService {
     }
 
     private Mono<Transaction> convertSavingTransaction(Map<String, BigDecimal> rates, ConversionRequest conversionRequest) {
-        BigDecimal rateEuroToOriginCurrency = rates.get(conversionRequest.getOriginCurrency());
+        BigDecimal rateEuroToOriginCurrency = rates.get(conversionRequest.getOriginCurrency().getDescription());
         BigDecimal euroValue = conversionRequest.getValue().divide(rateEuroToOriginCurrency, 6, RoundingMode.HALF_UP);
-        BigDecimal rateEuroToFinalCurrency = rates.get(conversionRequest.getFinalCurrency());
+        BigDecimal rateEuroToFinalCurrency = rates.get(conversionRequest.getFinalCurrency().getDescription());
         BigDecimal finalValue = euroValue.multiply(rateEuroToFinalCurrency);
         BigDecimal conversionRate = finalValue.divide(conversionRequest.getValue(), RoundingMode.HALF_UP);
 
         var transaction = Transaction.builder()
                 .conversionRate(conversionRate)
-                .finalCurrency(conversionRequest.getFinalCurrency())
+                .finalCurrency(conversionRequest.getFinalCurrency().getDescription())
                 .originValue(conversionRequest.getValue())
                 .finalValue(finalValue)
-                .originCurrency(conversionRequest.getOriginCurrency())
+                .originCurrency(conversionRequest.getOriginCurrency().getDescription())
                 .userId(conversionRequest.getUserId())
                 .createdAt(new Date())
                 .build();

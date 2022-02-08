@@ -24,10 +24,10 @@ public class CurrencyConversionApiApplication {
 	@Transactional
 	public ApplicationRunner criandoUsuarios(MongoUserRepository userRepository) {
 		return args -> {
-			Stream<User> stream = Stream.of(new User("Paulo"),
-					new User("George"),
-					new User("Raul"),
-					new User("Emanuel"));
+			Stream<User> stream = Stream.of(User.builder().name("Paulo").build(),
+					User.builder().name("George").build(),
+					User.builder().name("Raul").build(),
+					User.builder().name("Emanuel").build());
 
 			userRepository.saveAll(Flux.fromStream(stream)).subscribe();
 		};

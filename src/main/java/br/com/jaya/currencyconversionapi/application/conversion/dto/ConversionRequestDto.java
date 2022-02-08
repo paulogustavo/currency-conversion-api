@@ -1,28 +1,29 @@
 package br.com.jaya.currencyconversionapi.application.conversion.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConversionRequestDto {
 
-    private String originCurrency;
-    private BigDecimal value;
-    private String finalCurrency;
-    private String userId;
+    @NotNull(message = "Inform origin currency")
+    CurrencyDto originCurrency;
 
-    @Override
-    public String toString() {
-        return "RequestDTO{" +
-                "originCurrency='" + originCurrency + '\'' +
-                ", value=" + value +
-                ", finalCurrency='" + finalCurrency + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
-    }
+    @NotNull(message = "Inform amount to be converted")
+    @Positive(message = "Inform a positive number")
+    BigDecimal value;
+
+    @NotNull(message = "Inform final currency")
+    CurrencyDto finalCurrency;
+
+    @NotNull(message = "Inform user id")
+    String userId;
+
 }

@@ -1,25 +1,21 @@
 package br.com.jaya.currencyconversionapi.domain.conversion.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 
 @AllArgsConstructor
 public class ConversionRequest {
 
-    private String originCurrency;
+    private Currency originCurrency;
     private BigDecimal value;
-    private String finalCurrency;
+    private Currency finalCurrency;
     private String userId;
 
-    public String getOriginCurrency() {
+    public Currency getOriginCurrency() {
         return originCurrency;
     }
 
-    public void setOriginCurrency(String originCurrency) {
+    public void setOriginCurrency(Currency originCurrency) {
         this.originCurrency = originCurrency;
     }
 
@@ -31,11 +27,11 @@ public class ConversionRequest {
         this.value = value;
     }
 
-    public String getFinalCurrency() {
+    public Currency getFinalCurrency() {
         return finalCurrency;
     }
 
-    public void setFinalCurrency(String finalCurrency) {
+    public void setFinalCurrency(Currency finalCurrency) {
         this.finalCurrency = finalCurrency;
     }
 
@@ -45,15 +41,5 @@ public class ConversionRequest {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestDTO{" +
-                "originCurrency='" + originCurrency + '\'' +
-                ", value=" + value +
-                ", finalCurrency='" + finalCurrency + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
     }
 }

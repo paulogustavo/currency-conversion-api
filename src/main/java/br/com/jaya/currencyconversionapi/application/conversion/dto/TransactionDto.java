@@ -1,54 +1,34 @@
 package br.com.jaya.currencyconversionapi.application.conversion.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import lombok.experimental.FieldDefaults;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 @Builder
-@Document
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TransactionDto {
 
-    @Id
-    private String id;
+    @JsonProperty("identifier")
+    String id;
 
-    @Setter
-    private String userId;
+    @JsonProperty("userIdenfier")
+    String userId;
 
-    @Setter
-    private String originCurrency;
+    String originCurrency;
 
-    @Setter
-    private String finalCurrency;
+    String finalCurrency;
 
-    @Setter
-    private BigDecimal originValue;
+    BigDecimal originValue;
 
-    @Setter
-    private BigDecimal finalValue;
+    BigDecimal finalValue;
 
-    @Setter
-    private BigDecimal conversionRate;
+    BigDecimal conversionRate;
 
-    @Setter
-    private Date createdAt;
+    Date createdAt;
 
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", originCurrency='" + originCurrency + '\'' +
-                ", finalCurrency='" + finalCurrency + '\'' +
-                ", originValue=" + originValue +
-                ", finalValue=" + finalValue +
-                ", conversionRate=" + conversionRate +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }

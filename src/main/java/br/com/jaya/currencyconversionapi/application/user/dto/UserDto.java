@@ -1,18 +1,18 @@
 package br.com.jaya.currencyconversionapi.application.user.dto;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.experimental.FieldDefaults;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
 
-    @Id
-    private String id;
-    @Setter
-    private String name;
+    String id;
+
+    String name;
 
 
 }

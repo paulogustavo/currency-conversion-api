@@ -9,8 +9,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import javax.enterprise.context.ApplicationScoped;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,12 @@ public class ConversionApplicationService {
     CurrencyConversionService currencyConversionService;
     ConversionMapper conversionMapper;
     TransactionMapper transactionMapper;
+    Validator validator;
 
     public Mono<TransactionDto> convert(ConversionRequestDto conversionRequestDto){
+        final var validationResults = validator.validate(conversionRequestDto);
+        if(!validationResults.isEmpty())
+            return Mono.error(new ConstraintViolationException(validationResults));
         return currencyConversionService.convert(conversionMapper.map(conversionRequestDto)).map(transactionMapper::map);
     }
 }
