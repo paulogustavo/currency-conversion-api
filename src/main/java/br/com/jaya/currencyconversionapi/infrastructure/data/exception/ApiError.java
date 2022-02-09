@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.infrastructure.exception;
+package br.com.jaya.currencyconversionapi.infrastructure.data.exception;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

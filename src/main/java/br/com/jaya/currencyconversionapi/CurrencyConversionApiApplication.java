@@ -1,7 +1,7 @@
 package br.com.jaya.currencyconversionapi;
 
 import br.com.jaya.currencyconversionapi.domain.user.model.User;
-import br.com.jaya.currencyconversionapi.infrastructure.repository.MongoUserRepository;
+import br.com.jaya.currencyconversionapi.infrastructure.data.repository.MongoUserRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

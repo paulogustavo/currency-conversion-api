@@ -1,21 +1,10 @@
 package br.com.jaya.currencyconversionapi.service;
 
-import br.com.jaya.currencyconversionapi.domain.user.model.User;
-import br.com.jaya.currencyconversionapi.infrastructure.repository.MongoUserRepository;
-import org.junit.jupiter.api.Test;
+import br.com.jaya.currencyconversionapi.infrastructure.data.repository.MongoUserRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import reactor.core.publisher.Flux;
-import reactor.test.StepVerifier;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.times;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)

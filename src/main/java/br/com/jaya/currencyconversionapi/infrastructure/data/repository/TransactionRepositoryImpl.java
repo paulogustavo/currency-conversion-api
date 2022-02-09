@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.infrastructure.repository;
+package br.com.jaya.currencyconversionapi.infrastructure.data.repository;
 
 import br.com.jaya.currencyconversionapi.domain.conversion.model.Transaction;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.TransactionRepository;

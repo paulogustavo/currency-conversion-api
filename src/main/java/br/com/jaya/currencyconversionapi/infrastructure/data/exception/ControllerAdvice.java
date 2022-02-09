@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.infrastructure.exception;
+package br.com.jaya.currencyconversionapi.infrastructure.data.exception;
 
 import br.com.jaya.currencyconversionapi.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;

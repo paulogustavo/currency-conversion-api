@@ -1,8 +1,8 @@
-package br.com.jaya.currencyconversionapi.infrastructure.repository;
+package br.com.jaya.currencyconversionapi.infrastructure.data.repository;
 
 import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
-import br.com.jaya.currencyconversionapi.infrastructure.exception.InfrastructureException;
+import br.com.jaya.currencyconversionapi.infrastructure.data.exception.InfrastructureException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;

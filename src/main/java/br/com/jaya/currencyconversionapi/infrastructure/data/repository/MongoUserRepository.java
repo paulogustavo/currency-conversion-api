@@ -1,4 +1,4 @@
-package br.com.jaya.currencyconversionapi.infrastructure.repository;
+package br.com.jaya.currencyconversionapi.infrastructure.data.repository;
 
 import br.com.jaya.currencyconversionapi.domain.user.model.User;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
