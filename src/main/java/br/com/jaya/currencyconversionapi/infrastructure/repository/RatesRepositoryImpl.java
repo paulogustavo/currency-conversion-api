@@ -2,7 +2,7 @@ package br.com.jaya.currencyconversionapi.infrastructure.repository;
 
 import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
-import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
+import br.com.jaya.currencyconversionapi.infrastructure.exception.InfrastructureException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +26,7 @@ public class RatesRepositoryImpl implements RatesRepository {
                 .bodyToMono(RatesResponse.class)
                 .onErrorMap(ex -> {
                     ex.printStackTrace();
-                    return new CurrencyConversionException("Failed to fetch rates.");
+                    return new InfrastructureException("Failed to fetch rates.");
                 });
     }
 

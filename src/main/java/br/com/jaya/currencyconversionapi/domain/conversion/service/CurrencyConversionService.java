@@ -5,8 +5,8 @@ import br.com.jaya.currencyconversionapi.domain.conversion.model.RatesResponse;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.Transaction;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.RatesRepository;
 import br.com.jaya.currencyconversionapi.domain.conversion.repository.TransactionRepository;
+import br.com.jaya.currencyconversionapi.domain.user.exception.UserNotFoundException;
 import br.com.jaya.currencyconversionapi.domain.user.repository.UserRepository;
-import br.com.jaya.currencyconversionapi.infrastructure.exception.CurrencyConversionException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,46 +28,34 @@ public class CurrencyConversionService {
 
     public Mono<Transaction> convert(ConversionRequest conversionRequest){
         return userRepository.findById(conversionRequest.getUserId())
-                .switchIfEmpty(Mono.error(new CurrencyConversionException("User not found")))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
                 .flatMap(user -> ratesRepository.fetchRates())
                 .flatMap(rates -> getKeySetForValidation(rates)
-                .flatMap(currenciesKeySet ->
-                        validatePresenceOfInformedCurrencies(conversionRequest.getOriginCurrency().getDescription(),
-                                conversionRequest.getFinalCurrency().getDescription(), currenciesKeySet)
-                                .doOnError(Mono::error)
-                                .flatMap(ketSet -> convertSavingTransaction(rates.getRates(), conversionRequest))
+                .flatMap(ketSet -> convertCurrency(rates.getRates(), conversionRequest))
                                 .flatMap(transaction -> {
                                     //logger.info("Transaction created: {}", transaction);
                                     return Mono.just(transaction);
-                                }))
+                                })
                 );
     }
 
-    private Mono<Set<String>> validatePresenceOfInformedCurrencies(String originCurrency, String finalCurrency, Set<String> keySet) {
-        if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(originCurrency))) {
-            return Mono.error(new CurrencyConversionException("Origin currency not found."));
-        }
-
-        if (keySet.stream().noneMatch(currency -> currency.equalsIgnoreCase(finalCurrency))) {
-            return Mono.error(new CurrencyConversionException("Final currency not found."));
-        }
-
-        return Mono.just(keySet);
-    }
-
-    private Mono<Set<String>> getKeySetForValidation(RatesResponse ratesResponseDTO) {
-        Map<String, BigDecimal> rates = ratesResponseDTO.getRates();
+    private Mono<Set<String>> getKeySetForValidation(RatesResponse ratesResponse) {
+        Map<String, BigDecimal> rates = ratesResponse.getRates();
         Set<String> keySet = rates.keySet();
         return Mono.just(keySet);
     }
 
-    private Mono<Transaction> convertSavingTransaction(Map<String, BigDecimal> rates, ConversionRequest conversionRequest) {
+    private Mono<Transaction> convertCurrency(Map<String, BigDecimal> rates, ConversionRequest conversionRequest) {
         BigDecimal rateEuroToOriginCurrency = rates.get(conversionRequest.getOriginCurrency().getDescription());
         BigDecimal euroValue = conversionRequest.getValue().divide(rateEuroToOriginCurrency, 6, RoundingMode.HALF_UP);
         BigDecimal rateEuroToFinalCurrency = rates.get(conversionRequest.getFinalCurrency().getDescription());
         BigDecimal finalValue = euroValue.multiply(rateEuroToFinalCurrency);
         BigDecimal conversionRate = finalValue.divide(conversionRequest.getValue(), RoundingMode.HALF_UP);
 
+        return saveTransaction(conversionRate, conversionRequest, finalValue);
+    }
+
+    private Mono<Transaction> saveTransaction(BigDecimal conversionRate, ConversionRequest conversionRequest, BigDecimal finalValue){
         var transaction = Transaction.builder()
                 .conversionRate(conversionRate)
                 .finalCurrency(conversionRequest.getFinalCurrency().getDescription())

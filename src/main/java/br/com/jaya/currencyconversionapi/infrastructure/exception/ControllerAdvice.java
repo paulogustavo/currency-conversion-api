@@ -1,5 +1,6 @@
 package br.com.jaya.currencyconversionapi.infrastructure.exception;
 
+import br.com.jaya.currencyconversionapi.domain.user.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,31 +14,33 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleNonCachedException(Exception ex) {
         ex.printStackTrace();
-        var apiError = ApiError.builder()
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("Internal error")
-                .build();
-        return new ResponseEntity<>( apiError, HttpStatus.INTERNAL_SERVER_ERROR );
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error");
     }
 
-    @ExceptionHandler(CurrencyConversionException.class)
-    public ResponseEntity<Object> handleCustomException(CurrencyConversionException ex) {
+    @ExceptionHandler(InfrastructureException.class)
+    public ResponseEntity<Object> handleCustomException(InfrastructureException ex) {
         ex.printStackTrace();
-        var apiError = ApiError.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .build();
-        return new ResponseEntity<>( apiError, HttpStatus.BAD_REQUEST );
+        return getResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         ex.printStackTrace();
+        return getResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex) {
+        ex.printStackTrace();
+        return getResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    private ResponseEntity<Object> getResponseEntity(HttpStatus status, String message){
         var apiError = ApiError.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
+                .code(status.value())
+                .message(message)
                 .build();
-        return new ResponseEntity<>( apiError, HttpStatus.BAD_REQUEST );
+        return new ResponseEntity<>(apiError, status);
     }
 
 }
