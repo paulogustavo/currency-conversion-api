@@ -44,8 +44,8 @@ class CurrencyConversionServiceTest {
                 .build();
 
         var conversionRequest = ConversionRequest.builder()
-                .originCurrency(Currency.CAD)
-                .finalCurrency(Currency.BRL)
+                .originCurrency(Currency.BRL)
+                .finalCurrency(Currency.AUD)
                 .value(BigDecimal.TEN)
                 .userId(user.getId())
                 .build();
@@ -69,8 +69,8 @@ class CurrencyConversionServiceTest {
     void convert_ThrowsUserNotFoundException(){
         //Assemble
         var conversionRequest = ConversionRequest.builder()
-                .originCurrency(Currency.CAD)
-                .finalCurrency(Currency.BRL)
+                .originCurrency(Currency.BRL)
+                .finalCurrency(Currency.AUD)
                 .value(BigDecimal.TEN)
                 .userId("loremipsum123")
                 .build();
@@ -89,14 +89,14 @@ class CurrencyConversionServiceTest {
 
     private RatesResponse getRatesResponse(){
         Map<String, BigDecimal> rates = new HashMap<>();
-        rates.put("AUD", new BigDecimal("1.592647"));
-        rates.put("MXN", new BigDecimal("23.493212"));
-        rates.put("JPY", new BigDecimal("132.025941"));
-        rates.put("PLN", new BigDecimal("4.512007"));
+        rates.put("AUD", new BigDecimal("1.593275"));
+        rates.put("MXN", new BigDecimal("23.492258"));
+        rates.put("JPY", new BigDecimal("132.840936"));
+        rates.put("PLN", new BigDecimal("4.50034"));
         rates.put("EUR", new BigDecimal("1"));
-        rates.put("USD", new BigDecimal("1.14325"));
-        rates.put("CAD", new BigDecimal("1.451373"));
-        rates.put("BRL", new BigDecimal("6.022066"));
+        rates.put("USD", new BigDecimal("1.146653"));
+        rates.put("CAD", new BigDecimal("1.454816"));
+        rates.put("BRL", new BigDecimal("6.00698"));
 
         var ratesResponse = new RatesResponse();
         ratesResponse.setRates(rates);
@@ -106,14 +106,14 @@ class CurrencyConversionServiceTest {
 
     private Transaction getExpectedTransaction(Date createdAt){
         return Transaction.builder()
-                .conversionRate(BigDecimal.ONE)
-                .originCurrency(Currency.CAD.getDescription())
-                .finalCurrency(Currency.BRL.getDescription())
+                .conversionRate(new BigDecimal("0.265237269075"))
+                .originCurrency(Currency.BRL.getDescription())
+                .finalCurrency(Currency.AUD.getDescription())
                 .createdAt(createdAt)
-                .id("asdfad2342")
+                .id("transaction123")
                 .originValue(BigDecimal.TEN)
-                .finalValue(BigDecimal.TEN)
-                .userId("loremipsum")
+                .finalValue(new BigDecimal("2.65237269075"))
+                .userId("loremipsum123")
                 .build();
     }
 

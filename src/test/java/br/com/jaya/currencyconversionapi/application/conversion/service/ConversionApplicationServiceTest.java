@@ -36,7 +36,6 @@ class ConversionApplicationServiceTest {
     TransactionMapper transactionMapper = Mappers.getMapper(TransactionMapper.class);
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-
     @BeforeEach
     void setUp(){
         conversionApplicationService.setValidator(validator);
@@ -48,8 +47,8 @@ class ConversionApplicationServiceTest {
     void convert_Ok(){
         //Assemble
         var conversionDto = ConversionRequestDto.builder()
-                .originCurrency(CurrencyDto.CAD)
-                .finalCurrency(CurrencyDto.BRL)
+                .originCurrency(CurrencyDto.BRL)
+                .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
                 .userId("loremipsum123")
                 .build();
@@ -73,8 +72,8 @@ class ConversionApplicationServiceTest {
     void convert_ThrowsConstraintValidationException(){
         //Assemble
         var conversionDto = ConversionRequestDto.builder()
-                .originCurrency(CurrencyDto.CAD)
-                .finalCurrency(CurrencyDto.BRL)
+                .originCurrency(CurrencyDto.BRL)
+                .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
                 //.userId("loremipsum123")
                 .build();
@@ -88,27 +87,27 @@ class ConversionApplicationServiceTest {
 
     private TransactionResponseDto getExpectedTransactionDto(Date createdAt){
         return TransactionResponseDto.builder()
-                .conversionRate(BigDecimal.ONE)
-                .originCurrency(CurrencyDto.CAD.getDescription())
-                .finalCurrency(CurrencyDto.BRL.getDescription())
+                .conversionRate(new BigDecimal("0.265237269075"))
+                .originCurrency(CurrencyDto.BRL.getDescription())
+                .finalCurrency(CurrencyDto.AUD.getDescription())
                 .createdAt(createdAt)
-                .id("asdfad2342")
+                .id("transaction123")
                 .originValue(BigDecimal.TEN)
-                .finalValue(BigDecimal.TEN)
-                .userId("loremipsum")
+                .finalValue(new BigDecimal("2.65237269075"))
+                .userId("loremipsum123")
                 .build();
     }
 
     private Transaction getExpectedTransaction(Date createdAt){
         return Transaction.builder()
-                .conversionRate(BigDecimal.ONE)
-                .originCurrency(Currency.CAD.getDescription())
-                .finalCurrency(Currency.BRL.getDescription())
+                .conversionRate(new BigDecimal("0.265237269075"))
+                .originCurrency(Currency.BRL.getDescription())
+                .finalCurrency(Currency.AUD.getDescription())
                 .createdAt(createdAt)
-                .id("asdfad2342")
+                .id("transaction123")
                 .originValue(BigDecimal.TEN)
-                .finalValue(BigDecimal.TEN)
-                .userId("loremipsum")
+                .finalValue(new BigDecimal("2.65237269075"))
+                .userId("loremipsum123")
                 .build();
     }
 
