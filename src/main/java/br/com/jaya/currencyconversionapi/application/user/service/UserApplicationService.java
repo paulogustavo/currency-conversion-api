@@ -1,6 +1,6 @@
 package br.com.jaya.currencyconversionapi.application.user.service;
 
-import br.com.jaya.currencyconversionapi.application.user.dto.UserDto;
+import br.com.jaya.currencyconversionapi.application.user.dto.UserResponseDto;
 import br.com.jaya.currencyconversionapi.application.user.mapper.UserMapper;
 import br.com.jaya.currencyconversionapi.domain.user.service.UserService;
 import lombok.*;
@@ -16,7 +16,7 @@ public class UserApplicationService {
     UserService userService;
     UserMapper userMapper;
 
-    public Flux<UserDto> fetchUsers(){
+    public Flux<UserResponseDto> fetchUsers(){
         return userService.fetchUsers().map(userMapper::map);
     }
 }

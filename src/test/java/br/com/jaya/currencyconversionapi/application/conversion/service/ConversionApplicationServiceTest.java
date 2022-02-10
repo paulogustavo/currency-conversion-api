@@ -2,7 +2,7 @@ package br.com.jaya.currencyconversionapi.application.conversion.service;
 
 import br.com.jaya.currencyconversionapi.application.conversion.dto.ConversionRequestDto;
 import br.com.jaya.currencyconversionapi.application.conversion.dto.CurrencyDto;
-import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionDto;
+import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionResponseDto;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.ConversionMapper;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.TransactionMapper;
 import br.com.jaya.currencyconversionapi.domain.conversion.model.ConversionRequest;
@@ -86,8 +86,8 @@ class ConversionApplicationServiceTest {
         assertThat(throwable).isInstanceOf(ConstraintViolationException.class);
     }
 
-    private TransactionDto getExpectedTransactionDto(Date createdAt){
-        return TransactionDto.builder()
+    private TransactionResponseDto getExpectedTransactionDto(Date createdAt){
+        return TransactionResponseDto.builder()
                 .conversionRate(BigDecimal.ONE)
                 .originCurrency(CurrencyDto.CAD.getDescription())
                 .finalCurrency(CurrencyDto.BRL.getDescription())

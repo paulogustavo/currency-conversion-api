@@ -1,6 +1,6 @@
 package br.com.jaya.currencyconversionapi.application.conversion.service;
 
-import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionDto;
+import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionResponseDto;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.TransactionMapper;
 import br.com.jaya.currencyconversionapi.domain.conversion.service.TransactionService;
 import lombok.*;
@@ -16,7 +16,7 @@ public class TransactionApplicationService {
     TransactionService transactionService;
     TransactionMapper transactionMapper;
 
-    public Flux<TransactionDto> fetchTransactions(String userId){
+    public Flux<TransactionResponseDto> fetchTransactions(String userId){
         return transactionService.fetchTransactions(userId).map(transactionMapper::map);
     }
 }

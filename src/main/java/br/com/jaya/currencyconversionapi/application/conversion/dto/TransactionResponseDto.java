@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TransactionDto {
+public class TransactionResponseDto {
 
     @JsonProperty("identifier")
     String id;

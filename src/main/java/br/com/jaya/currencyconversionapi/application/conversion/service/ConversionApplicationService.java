@@ -1,7 +1,7 @@
 package br.com.jaya.currencyconversionapi.application.conversion.service;
 
 import br.com.jaya.currencyconversionapi.application.conversion.dto.ConversionRequestDto;
-import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionDto;
+import br.com.jaya.currencyconversionapi.application.conversion.dto.TransactionResponseDto;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.ConversionMapper;
 import br.com.jaya.currencyconversionapi.application.conversion.mapper.TransactionMapper;
 import br.com.jaya.currencyconversionapi.domain.conversion.service.CurrencyConversionService;
@@ -35,7 +35,7 @@ public class ConversionApplicationService {
         this.validator = validator;
     }
 
-    public Mono<TransactionDto> convert(ConversionRequestDto conversionRequestDto){
+    public Mono<TransactionResponseDto> convert(ConversionRequestDto conversionRequestDto){
         final var validationResults = validator.validate(conversionRequestDto);
         if(!validationResults.isEmpty())
             return Mono.error(new ConstraintViolationException(validationResults));
