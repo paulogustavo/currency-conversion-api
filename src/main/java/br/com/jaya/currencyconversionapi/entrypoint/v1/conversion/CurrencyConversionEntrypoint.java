@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "/currency-conversion")
 public class CurrencyConversionEntrypoint {
 
-    private final ConversionApplicationService currencyConversionService;
+    private final ConversionApplicationService conversionApplicationService;
     private final RatesApplicationService ratesApplicationService;
     private final TransactionApplicationService transactionApplicationService;
 
@@ -27,7 +27,7 @@ public class CurrencyConversionEntrypoint {
     public CurrencyConversionEntrypoint(ConversionApplicationService conversionApplicationService,
                                         RatesApplicationService ratesRepository,
                                         TransactionApplicationService transactionApplicationService) {
-        this.currencyConversionService = conversionApplicationService;
+        this.conversionApplicationService = conversionApplicationService;
         this.ratesApplicationService = ratesRepository;
         this.transactionApplicationService = transactionApplicationService;
     }
@@ -49,7 +49,7 @@ public class CurrencyConversionEntrypoint {
     @ApiResponse(responseCode = "200", description = "Currency conversion successful")
     public Mono<TransactionResponseDto> convert(@RequestBody ConversionRequestDto conversionRequestDto) {
         log.info("New currency conversion request: {}", conversionRequestDto);
-        return currencyConversionService.convert(conversionRequestDto)
+        return conversionApplicationService.convert(conversionRequestDto)
                 .map(transactionDto -> {
                     log.info("Currency conversion successful: {}", transactionDto);
                     return transactionDto;
