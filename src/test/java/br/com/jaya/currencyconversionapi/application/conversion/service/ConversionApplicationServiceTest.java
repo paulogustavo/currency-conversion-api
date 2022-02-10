@@ -46,22 +46,22 @@ class ConversionApplicationServiceTest {
     @Test
     void convert_Ok(){
         //Assemble
-        var conversionDto = ConversionRequestDto.builder()
+        ConversionRequestDto conversionDto = ConversionRequestDto.builder()
                 .originCurrency(CurrencyDto.BRL)
                 .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
                 .userId("loremipsum123")
                 .build();
 
-        var createdAt = new Date();
-        var expectedTransaction = getExpectedTransaction(createdAt);
-        var expectedTransactionDto = getExpectedTransactionDto(createdAt);
+        Date createdAt = new Date();
+        Transaction expectedTransaction = getExpectedTransaction(createdAt);
+        TransactionResponseDto expectedTransactionDto = getExpectedTransactionDto(createdAt);
 
         when(currencyConversionService.convert(any(ConversionRequest.class)))
                 .thenReturn(Mono.just(expectedTransaction));
 
         //Act
-        var outputTransaction = conversionApplicationService.convert(conversionDto).block();
+        TransactionResponseDto outputTransaction = conversionApplicationService.convert(conversionDto).block();
 
         //Assert
         assertThat(expectedTransactionDto)
@@ -71,7 +71,7 @@ class ConversionApplicationServiceTest {
     @Test
     void convert_ThrowsConstraintValidationException(){
         //Assemble
-        var conversionDto = ConversionRequestDto.builder()
+        ConversionRequestDto conversionDto = ConversionRequestDto.builder()
                 .originCurrency(CurrencyDto.BRL)
                 .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
@@ -79,7 +79,7 @@ class ConversionApplicationServiceTest {
                 .build();
 
         //Act
-        var throwable = catchThrowable(() -> conversionApplicationService.convert(conversionDto).block());
+        Throwable throwable = catchThrowable(() -> conversionApplicationService.convert(conversionDto).block());
 
         //Assert
         assertThat(throwable).isInstanceOf(ConstraintViolationException.class);

@@ -65,7 +65,7 @@ public class CurrencyConversionService {
      * @return Mono<Transaction> object with saved transaction
      */
     private Mono<Transaction> saveTransaction(BigDecimal conversionRate, ConversionRequest conversionRequest, BigDecimal finalValue){
-        var transaction = Transaction.builder()
+        Transaction transaction = Transaction.builder()
                 .conversionRate(conversionRate)
                 .finalCurrency(conversionRequest.getFinalCurrency().getDescription())
                 .originValue(conversionRequest.getValue())

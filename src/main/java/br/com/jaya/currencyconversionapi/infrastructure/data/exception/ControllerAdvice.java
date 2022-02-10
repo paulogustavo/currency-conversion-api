@@ -36,7 +36,7 @@ public class ControllerAdvice {
     }
 
     private ResponseEntity<Object> getResponseEntity(HttpStatus status, String message){
-        var apiError = ApiError.builder()
+        ApiError apiError = ApiError.builder()
                 .code(status.value())
                 .message(message)
                 .build();

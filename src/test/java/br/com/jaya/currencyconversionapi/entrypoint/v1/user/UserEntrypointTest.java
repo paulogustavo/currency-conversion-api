@@ -30,12 +30,12 @@ class UserEntrypointTest {
     @Test
     void fetchUsers_Ok() {
         //Assemble
-        var userResponseDto1 = UserResponseDto.builder()
+        UserResponseDto userResponseDto1 = UserResponseDto.builder()
                 .id("lorem123")
                 .name("Paulo")
                 .build();
 
-        var userResponseDto2 = UserResponseDto.builder()
+        UserResponseDto userResponseDto2 = UserResponseDto.builder()
                 .id("ipsum123")
                 .name("Gustavo")
                 .build();

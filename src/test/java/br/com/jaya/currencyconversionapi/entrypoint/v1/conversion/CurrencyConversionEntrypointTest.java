@@ -46,15 +46,15 @@ class CurrencyConversionEntrypointTest {
     @Test
     void convert_Ok() {
         //Assemble
-        var conversionRequestDto = ConversionRequestDto.builder()
+        ConversionRequestDto conversionRequestDto = ConversionRequestDto.builder()
                 .originCurrency(CurrencyDto.BRL)
                 .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
                 .userId("loremipsum123")
                 .build();
 
-        var transactionCreateAt = new Date();
-        var transactionResponseDto = getExpectedTransactionDto(transactionCreateAt);
+        Date transactionCreateAt = new Date();
+        TransactionResponseDto transactionResponseDto = getExpectedTransactionDto(transactionCreateAt);
 
         when(conversionApplicationService.convert(any(ConversionRequestDto.class))).thenReturn(Mono.just(transactionResponseDto));
 
@@ -71,7 +71,7 @@ class CurrencyConversionEntrypointTest {
     @Test
     void convert_BadRequest() {
         //Assemble
-        var conversionRequestDto = ConversionRequestDto.builder()
+        ConversionRequestDto conversionRequestDto = ConversionRequestDto.builder()
                 .originCurrency(CurrencyDto.BRL)
                 .finalCurrency(CurrencyDto.AUD)
                 .value(BigDecimal.TEN)
@@ -94,7 +94,7 @@ class CurrencyConversionEntrypointTest {
     @Test
     void fetchRates_Ok() {
         //Assemble
-        var ratesResponseDto = getRatesResponseDto();
+        RatesResponseDto ratesResponseDto = getRatesResponseDto();
 
         when(ratesApplicationService.fetchRates()).thenReturn(Mono.just(ratesResponseDto));
 
@@ -111,10 +111,10 @@ class CurrencyConversionEntrypointTest {
     @Test
     void fetchTransactions_Ok() {
         //Assemble
-        var userId = "loremipsum123";
+        String userId = "loremipsum123";
 
-        var transactionCreateAt = new Date();
-        var transactionResponseDto = getExpectedTransactionDto(transactionCreateAt);
+        Date transactionCreateAt = new Date();
+        TransactionResponseDto transactionResponseDto = getExpectedTransactionDto(transactionCreateAt);
 
         when(transactionApplicationService.fetchTransactions(any(String.class))).thenReturn(Flux.just(transactionResponseDto));
 
@@ -151,7 +151,7 @@ class CurrencyConversionEntrypointTest {
         rates.put("CAD", new BigDecimal("1.454816"));
         rates.put("BRL", new BigDecimal("6.00698"));
 
-        var ratesResponse = new RatesResponseDto();
+        RatesResponseDto ratesResponse = new RatesResponseDto();
         ratesResponse.setRates(rates);
 
         return ratesResponse;

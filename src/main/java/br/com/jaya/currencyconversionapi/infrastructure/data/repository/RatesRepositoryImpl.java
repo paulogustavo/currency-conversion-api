@@ -28,7 +28,7 @@ public class RatesRepositoryImpl implements RatesRepository {
      * @return Mono<RatesResponseDto> object with conversion rates
      */
     public Mono<RatesResponse> fetchRates() {
-        var ratesWebClient = WebClient.create(url);
+        WebClient ratesWebClient = WebClient.create(url);
         return ratesWebClient.get()
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new InfrastructureException("Communication error with rates api client")))

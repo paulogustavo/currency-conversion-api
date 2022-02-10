@@ -38,26 +38,26 @@ class CurrencyConversionServiceTest {
     @Test
     void convert_Ok(){
         //Assemble
-        var user = User.builder()
+        User user = User.builder()
                 .id("loremipsum123")
                 .name("Paulo")
                 .build();
 
-        var conversionRequest = ConversionRequest.builder()
+        ConversionRequest conversionRequest = ConversionRequest.builder()
                 .originCurrency(Currency.BRL)
                 .finalCurrency(Currency.AUD)
                 .value(BigDecimal.TEN)
                 .userId(user.getId())
                 .build();
 
-        var expectedTransaction = getExpectedTransaction(new Date());
+        Transaction expectedTransaction = getExpectedTransaction(new Date());
 
         when(userRepository.findById(anyString())).thenReturn(Mono.just(user));
         when(ratesRepository.fetchRates()).thenReturn(Mono.just(getRatesResponse()));
         when(transactionRepository.save(any(Transaction.class))).thenReturn(Mono.just(expectedTransaction));
 
         //Act
-        var outputTransaction = currencyConversionService.convert(conversionRequest).block();
+        Transaction outputTransaction = currencyConversionService.convert(conversionRequest).block();
 
         //Verify
         assertThat(outputTransaction)
@@ -68,7 +68,7 @@ class CurrencyConversionServiceTest {
     @Test
     void convert_ThrowsUserNotFoundException(){
         //Assemble
-        var conversionRequest = ConversionRequest.builder()
+        ConversionRequest conversionRequest = ConversionRequest.builder()
                 .originCurrency(Currency.BRL)
                 .finalCurrency(Currency.AUD)
                 .value(BigDecimal.TEN)
@@ -78,7 +78,7 @@ class CurrencyConversionServiceTest {
         when(userRepository.findById(anyString())).thenThrow(UserNotFoundException.class);
 
         //Act
-        var throwable = catchThrowable(() -> currencyConversionService.convert(conversionRequest).block());
+        Throwable throwable = catchThrowable(() -> currencyConversionService.convert(conversionRequest).block());
 
         //Verify
         assertThat(throwable)
@@ -98,7 +98,7 @@ class CurrencyConversionServiceTest {
         rates.put("CAD", new BigDecimal("1.454816"));
         rates.put("BRL", new BigDecimal("6.00698"));
 
-        var ratesResponse = new RatesResponse();
+        RatesResponse ratesResponse = new RatesResponse();
         ratesResponse.setRates(rates);
 
         return ratesResponse;
