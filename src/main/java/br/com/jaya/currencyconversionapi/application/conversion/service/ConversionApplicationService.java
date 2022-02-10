@@ -7,20 +7,33 @@ import br.com.jaya.currencyconversionapi.application.conversion.mapper.Transacti
 import br.com.jaya.currencyconversionapi.domain.conversion.service.CurrencyConversionService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
 @Service
+@Data
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConversionApplicationService {
 
     CurrencyConversionService currencyConversionService;
     ConversionMapper conversionMapper;
     TransactionMapper transactionMapper;
     Validator validator;
+
+    @Autowired
+    public ConversionApplicationService(CurrencyConversionService currencyConversionService,
+                                        ConversionMapper conversionMapper,
+                                        TransactionMapper transactionMapper,
+                                        Validator validator){
+        this.currencyConversionService = currencyConversionService;
+        this.conversionMapper = conversionMapper;
+        this.transactionMapper = transactionMapper;
+        this.validator = validator;
+    }
 
     public Mono<TransactionDto> convert(ConversionRequestDto conversionRequestDto){
         final var validationResults = validator.validate(conversionRequestDto);

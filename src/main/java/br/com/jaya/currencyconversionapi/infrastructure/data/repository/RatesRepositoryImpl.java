@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -23,11 +24,10 @@ public class RatesRepositoryImpl implements RatesRepository {
         var ratesWebClient = WebClient.create(url);
         return ratesWebClient.get()
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(new InfrastructureException("Communication error with rates api client")))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(new InfrastructureException("Rates api client internal error")))
                 .bodyToMono(RatesResponse.class)
-                .onErrorMap(ex -> {
-                    ex.printStackTrace();
-                    return new InfrastructureException("Failed to fetch rates.");
-                });
+                .onErrorMap(ex -> new InfrastructureException("Failed to fetch rates."));
     }
 
 }
