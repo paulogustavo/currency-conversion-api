@@ -10,7 +10,7 @@ This Spring WebFlux API allows you, among some other things, to convert any amou
 
 ### Installation
 
-Execute the following command in the project root:
+Execute the following command in the project's root directory:
 
 ```bash
 mvn spring-boot:run
