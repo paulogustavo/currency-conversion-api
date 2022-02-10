@@ -32,10 +32,7 @@ public class CurrencyConversionService {
                 .flatMap(user -> ratesRepository.fetchRates())
                 .flatMap(rates -> getKeySetForValidation(rates)
                 .flatMap(ketSet -> convertCurrency(rates.getRates(), conversionRequest))
-                                .flatMap(transaction -> {
-                                    //logger.info("Transaction created: {}", transaction);
-                                    return Mono.just(transaction);
-                                })
+                                .flatMap(Mono::just)
                 );
     }
 
