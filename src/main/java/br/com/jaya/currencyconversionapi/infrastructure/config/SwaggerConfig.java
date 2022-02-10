@@ -25,8 +25,11 @@ public class SwaggerConfig implements WebFluxConfigurer {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder().title("Currency Conversion API")
-                .description("Currency Conversion API Swagger")
-                .version("1.0").build();
+                .description("API for easy currency conversion")
+                .version("1.2.0")
+                .license("The MIT license")
+                .licenseUrl("https://choosealicense.com/licenses/mit/")
+                .build();
     }
 
 }

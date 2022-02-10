@@ -33,7 +33,7 @@ public class CurrencyConversionEntrypoint {
     }
 
     @GetMapping(value = "/rates")
-    @Operation(summary = "Fetch currency conversion rates")
+    @Operation(summary = "Fetch currency conversion rates (base EUR)")
     @ApiResponse(responseCode = "200", description = "Currency conversion rates list")
     public Mono<RatesResponseDto> getRates() {
         log.info("New rates fetching request");
