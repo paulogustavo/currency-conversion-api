@@ -7,6 +7,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
 
+    /**
+     * Maps a Transaction object to a TransactionResponseDto object
+     * @return TransactionResponseDto application object
+     */
     TransactionResponseDto map(Transaction toMap);
 
 }

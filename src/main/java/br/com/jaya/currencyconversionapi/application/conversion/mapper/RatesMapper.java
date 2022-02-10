@@ -7,6 +7,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface RatesMapper {
 
+    /**
+     * Maps a RatesResponse object to a RatesResponseDto object
+     * @return RatesResponseDto application object
+     */
     RatesResponseDto map(RatesResponse toMap);
 
 }
