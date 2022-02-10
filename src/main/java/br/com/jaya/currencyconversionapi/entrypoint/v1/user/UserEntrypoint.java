@@ -4,6 +4,8 @@ import br.com.jaya.currencyconversionapi.application.user.dto.UserResponseDto;
 import br.com.jaya.currencyconversionapi.application.user.service.UserApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +16,10 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @RestController
 @RequestMapping(value = "/users")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserEntrypoint {
 
-    private final UserApplicationService userApplicationService;
+    UserApplicationService userApplicationService;
 
     @Autowired
     public UserEntrypoint(UserApplicationService userApplicationService) {

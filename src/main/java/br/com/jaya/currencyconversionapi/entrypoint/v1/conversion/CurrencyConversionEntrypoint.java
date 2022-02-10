@@ -8,6 +8,8 @@ import br.com.jaya.currencyconversionapi.application.conversion.dto.ConversionRe
 import br.com.jaya.currencyconversionapi.application.conversion.service.TransactionApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +19,12 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequestMapping(value = "/currency-conversion")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CurrencyConversionEntrypoint {
 
-    private final ConversionApplicationService conversionApplicationService;
-    private final RatesApplicationService ratesApplicationService;
-    private final TransactionApplicationService transactionApplicationService;
+    ConversionApplicationService conversionApplicationService;
+    RatesApplicationService ratesApplicationService;
+    TransactionApplicationService transactionApplicationService;
 
     @Autowired
     public CurrencyConversionEntrypoint(ConversionApplicationService conversionApplicationService,
