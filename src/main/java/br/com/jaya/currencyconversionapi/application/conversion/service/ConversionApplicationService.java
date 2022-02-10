@@ -35,6 +35,11 @@ public class ConversionApplicationService {
         this.validator = validator;
     }
 
+    /**
+     * Convert currency - Application layer service
+     * @param conversionRequestDto Dto with conversion needed info
+     * @return Mono<TransactionResponseDto> object with saved transaction
+     */
     public Mono<TransactionResponseDto> convert(ConversionRequestDto conversionRequestDto){
         final var validationResults = validator.validate(conversionRequestDto);
         if(!validationResults.isEmpty())

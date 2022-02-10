@@ -17,9 +17,16 @@ import reactor.core.publisher.Mono;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RatesRepositoryImpl implements RatesRepository {
 
+    /**
+     * external api url for fetching currency conversion rates
+     */
     @Value("${rates.url}")
     String url;
 
+    /**
+     * Fetch rates from external api - Infrastructure layer
+     * @return Mono<RatesResponseDto> object with conversion rates
+     */
     public Mono<RatesResponse> fetchRates() {
         var ratesWebClient = WebClient.create(url);
         return ratesWebClient.get()

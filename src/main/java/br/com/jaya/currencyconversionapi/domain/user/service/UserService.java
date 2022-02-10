@@ -15,6 +15,10 @@ public class UserService {
 
     UserRepository userRepository;
 
+    /**
+     * Find all users - Domain service
+     * @return Flux<User> object with users information
+     */
     public Flux<User> fetchUsers(){
         return userRepository.fetchUsers();
     }

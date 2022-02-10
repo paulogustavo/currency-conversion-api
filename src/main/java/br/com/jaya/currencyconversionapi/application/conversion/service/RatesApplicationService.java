@@ -16,6 +16,10 @@ public class RatesApplicationService {
     RatesService ratesService;
     RatesMapper ratesMapper;
 
+    /**
+     * Fetch rates - Application layer
+     * @return Mono<RatesResponseDto>
+     */
     public Mono<RatesResponseDto> fetchRates(){
         return ratesService.fetchRates().map(ratesMapper::map);
     }

@@ -15,6 +15,10 @@ public class RatesService {
 
     RatesRepository ratesRepository;
 
+    /**
+     * Fetch rates - Domain layer service
+     * @return Mono<RatesResponseDto>
+     */
     public Mono<RatesResponse> fetchRates(){
         return ratesRepository.fetchRates();
     }

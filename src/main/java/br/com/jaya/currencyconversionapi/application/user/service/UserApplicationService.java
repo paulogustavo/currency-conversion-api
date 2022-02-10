@@ -16,6 +16,10 @@ public class UserApplicationService {
     UserService userService;
     UserMapper userMapper;
 
+    /**
+     * Find all users
+     * @return Flux<User> object with users information
+     */
     public Flux<UserResponseDto> fetchUsers(){
         return userService.fetchUsers().map(userMapper::map);
     }
